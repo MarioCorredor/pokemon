@@ -1,0 +1,302 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card mx-auto my-4" style="width: 20rem;">
+                <!-- Contenido de la primera tarjeta -->
+                <div class="card-body text-center">
+                    <div *ngIf="pokemon">
+                        <h1 class="card-title text-center">{{ pokemon.name.charAt(0).toUpperCase() +
+                            pokemon.name.slice(1)}}</h1>
+                        <h5 class="card-text text-center">#{{pokemon.id}}</h5>
+                    </div>
+                    <div *ngIf="pokemon && pokemon.sprites">
+                        <div *ngIf="pokemon.sprites.front_default; then thenBlock else elseBlock"></div>
+                        <ng-template #thenBlock>
+                            <img style="width: 10rem;" class="mx-auto" [src]="pokemon.sprites.front_default" />
+                        </ng-template>
+                        <ng-template #elseBlock>
+                            <div
+                                *ngIf="pokemon.sprites['other']['official-artwork']['front_default']; then thenBlock1 else elseBlock1">
+                            </div>
+                            <ng-template #thenBlock1>
+                                <img style="width: 10rem;" class="mx-auto"
+                                    [src]="pokemon.sprites['other']['official-artwork']['front_default']" />
+                            </ng-template>
+                            <ng-template #elseBlock1>
+                                <img style="width: 10rem;" class="mx-auto" src='../../../assets/imgs/missing.png' />
+                            </ng-template>
+                        </ng-template>
+                    </div>
+                    <h3 class="card-text">Types</h3>
+                    <br>
+                    <div *ngIf="pokemon && pokemon.id">
+                        <ul class="list-unstyled text-center type-icons">
+                            <li *ngFor="let type of pokemon.types">
+                                <div class="icon" [ngClass]="type.type.name" (click)="redirectToType(type.type.url)">
+                                    <img [src]="'../../../assets/move_types/' + (type.type.name) + '.svg'" />
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <h3 class="text-center">Shiny Sprites</h3>
+                    <div *ngIf="pokemon && pokemon.sprites">
+                        <div
+                            *ngIf="pokemon.sprites.back_shiny != null || pokemon.sprites.front_shiny != null; then thenBlock2 else elseBlock2">
+                        </div>
+                        <ng-template #thenBlock2>
+                            <img class="mx-auto" [src]="pokemon.sprites.back_shiny" />
+                            <img class="mx-auto" [src]="pokemon.sprites.front_shiny" />
+                        </ng-template>
+                        <ng-template #elseBlock2>
+                            <div
+                                *ngIf="pokemon.sprites['other']['official-artwork']['front_shiny']; then thenBlock3 else elseBlock3">
+                            </div>
+                            <ng-template #thenBlock3>
+                                <img style="width: 10rem;" class="mx-auto"
+                                    [src]="pokemon.sprites['other']['official-artwork']['front_shiny']" />
+                            </ng-template>
+                            <ng-template #elseBlock3>
+                                <p>No shiny sprite available</p>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+
+                    <div class="d-flex justify-content-around">
+                        <button mat-raised-button color="primary" extended (click)="redirectminus()">
+                            Anterior
+                        </button>
+                        <button mat-raised-button color="primary" (click)="redirectplus()">
+                            Siguiente
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <div class="card mx-auto my-4" style="width: 20rem;">
+                        <!-- Contenido de la tercera tarjeta (Abilities) -->
+                        <div class="card-body text-center">
+                            <h3 class="card-text">Abilities</h3>
+                            <div *ngIf="pokemon && pokemon.abilities">
+                                <ul class="list-unstyled text-center">
+                                    <li *ngFor="let ability of pokemon.abilities">
+                                        {{ ability.ability.name.charAt(0).toUpperCase() +
+                                        ability.ability.name.slice(1)}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card mx-auto my-4" style="width: 20rem;">
+                <!-- Contenido de la segunda tarjeta (Stats) -->
+                <div class="card-body text-center">
+                    <h3 class="card-text">Stats</h3>
+                    <div *ngIf="pokemon && pokemon.stats">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr *ngFor="let stat of pokemon.stats">
+                                        <td>{{ stat.stat.name.charAt(0).toUpperCase() +
+                                            stat.stat.name.slice(1)}}</td>
+                                        <td>{{ stat.base_stat }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="chain">
+        <div class="card mx-auto my-4"
+            *ngIf="chain.chain.evolves_to.length > 0 || species.evolves_from_species != null">
+            <h1 class="mt-4 card-title text-center"> {{ pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}}
+                evolution chain</h1>
+            <div *ngFor="let evol of chain.chain.evolves_to; let i = index">
+                <div *ngIf="evol.evolves_to.length > 0; then thenBlock2 else elseBlock2"></div>
+                <ng-template #elseBlock2>
+                    <!-- Si hay 2 evoluciones -->
+                    <div class="row justify-content-around">
+                        <div class="col">
+                            <!-- Contenido de la primera tarjeta -->
+                            <!-- Puedes usar el mismo estilo "card mx-auto my-4" o personalizarlo según tus necesidades -->
+                            <div class="card mx-auto my-4" style="width: 20rem;">
+                                <div class="card-body text-center">
+                                    <h5 class="card-text">{{chain.chain.species.name.charAt(0).toUpperCase() +
+                                        chain.chain.species.name.slice(1)}}</h5>
+                                        <img [src]="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col align-self-center">
+                            <!-- Flecha hacia la izquierda -->
+                            <div class="text-center">
+                                <p>--></p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <!-- Contenido de la segunda tarjeta -->
+                            <!-- Puedes usar el mismo estilo "card mx-auto my-4" o personalizarlo según tus necesidades -->
+                            <div class="card mx-auto my-4" style="width: 20rem;">
+                                <div class="card-body text-center">
+                                    <h5 class="card-text">{{evol.species.name.charAt(0).toUpperCase() +
+                                        evol.species.name.slice(1)}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template #thenBlock2>
+                    <!-- Si no hay 3 evoluciones -->
+                    <div *ngFor="let evolve of chain.chain.evolves_to[i].evolves_to; let ind = index">
+                        <div class="row justify-content-around">
+                            <div class="col">
+                                <!-- Contenido de la primera tarjeta -->
+                                <!-- Puedes usar el mismo estilo "card mx-auto my-4" o personalizarlo según tus necesidades -->
+                                <div class="card mx-auto my-4" style="width: 20rem;">
+                                    <div class="card-body text-center">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-text">{{chain.chain.species.name.charAt(0).toUpperCase() +
+                                                chain.chain.species.name.slice(1)}}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col align-self-center">
+                                <!-- Flecha hacia la izquierda -->
+                                <div class="text-center">
+                                    <p>--></p>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <!-- Contenido de la segunda tarjeta -->
+                                <!-- Puedes usar el mismo estilo "card mx-auto my-4" o personalizarlo según tus necesidades -->
+                                <div class="card mx-auto my-4" style="width: 20rem;">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-text">{{evol.species.name.charAt(0).toUpperCase() +
+                                            evol.species.name.slice(1)}}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col align-self-center">
+                                <!-- Flecha hacia la izquierda -->
+                                <div class="text-center">
+                                    <p>--></p>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <!-- Contenido de la tercera tarjeta -->
+                                <!-- Puedes usar el mismo estilo "card mx-auto my-4" o personalizarlo según tus necesidades -->
+                                <div class="card mx-auto my-4" style="width: 20rem;">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-text">{{evolve.species.name.charAt(0).toUpperCase() +
+                                            evolve.species.name.slice(1)}}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="container">
+    <div *ngIf="pokemon && pokemon.name">
+        <h1 class="text-center">
+            {{ pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}} can learn this moves
+        </h1>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div *ngIf="isLoading"
+                class="col-12 loading-animation d-flex align-items-center justify-content-center text-center">
+                <div class="position-fixed top-50 start-50 translate-middle">
+                    <mat-spinner></mat-spinner>
+                </div>
+            </div>
+
+            <div *ngIf="!isLoading">
+                <div class="table-responsive">
+                    <table class="table table-vertical">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Move Name</th>
+                                <th class="text-center">Type</th>
+                                <th class="text-center">Category</th>
+                                <th class="text-center">Power</th>
+                                <th class="text-center">Accuracy</th>
+                                <th class="text-center">PP</th>
+                                <th class="text-center">Learned at level</th>
+                                <th class="text-center">Learn method</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="moveArray">
+                            <tr *ngFor="let move of pokemon.moves; let i = index">
+                                <td class="text-center">
+                                    {{ moveArray[i].id}}
+                                </td>
+                                <td class="text-center" (click)="redirectToMove(move.move.url)">
+                                    <a class="clickable-move">{{ moveArray[i].name.charAt(0).toUpperCase() +
+                                        moveArray[i].name.slice(1) }}</a>
+                                </td>
+                                <td class="text-center">
+                                    <div class="icon" [ngClass]="moveArray[i].type.name"
+                                        (click)="redirectToType(moveArray[i].type.url)">
+                                        <img [src]="'../../../assets/move_types/' + (moveArray[i].type.name) + '.svg'"
+                                            [alt]="moveArray[i].type.name" />
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div>
+                                        <img [src]="'../../../assets/move_categories/' + (moveArray[i].damage_class.name) + '.png'"
+                                            [alt]="moveArray[i].damage_class.name" />
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div *ngIf="moveArray[i].power; then thenBlock else elseBlock"></div>
+                                    <ng-template #thenBlock>
+                                        {{ moveArray[i].power }}
+                                    </ng-template>
+                                    <ng-template #elseBlock>
+                                        <p>-</p>
+                                    </ng-template>
+                                </td>
+                                <td class="text-center">
+                                    <div *ngIf="moveArray[i].accuracy; then thenBlock1 else elseBlock1"></div>
+                                    <ng-template #thenBlock1>
+                                        {{ moveArray[i].accuracy }}
+                                    </ng-template>
+                                    <ng-template #elseBlock1>
+                                        <p>-</p>
+                                    </ng-template>
+                                </td>
+                                <td class="text-center">
+                                    {{ moveArray[i].pp }}
+                                </td>
+                                <td class="text-center">
+                                    {{ move.version_group_details[0].level_learned_at }}
+                                </td>
+                                <td class="text-center">
+                                    {{ move.version_group_details[0].move_learn_method.name.charAt(0).toUpperCase() +
+                                    move.version_group_details[0].move_learn_method.name.slice(1) }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

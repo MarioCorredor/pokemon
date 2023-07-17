@@ -1,0 +1,226 @@
+<div class="container">
+    <div class="card mx-auto my-4">
+        <div class="row">
+            <div *ngIf="move">
+                <h1 class="col card-title text-center mt-4">
+                    {{ move.name.charAt(0).toUpperCase() + move.name.slice(1) }}
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4 card-body text-center">
+                <h3 class="card-text">Move Data</h3>
+                <div class="table-responsive">
+                    <table class="table table-vertical">
+                        <tbody>
+                            <tr>
+                                <th class="centered-cell">Type</th>
+                                <td>
+                                    <div *ngIf="move && move.type && move.type.name">
+                                        <div class="icon" [ngClass]="move.type.name"
+                                            (click)="redirectToType(move.type.url)">
+                                            <img [src]="'../../../assets/move_types/' + (move.type.name) + '.svg'"
+                                                [alt]="move.type.name" />
+                                        </div>
+                                        <h5>{{ move.type.name.charAt(0).toUpperCase() + move.type.name.slice(1) }}</h5>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="centered-cell">
+                                    Category
+                                </th>
+                                <td>
+                                    <div *ngIf="move && move.damage_class && move.damage_class.name">
+                                        <div>
+                                            <img [src]="'../../../assets/move_categories/' + (move.damage_class.name) + '.png'"
+                                                [alt]="move.damage_class.name" />
+                                        </div>
+                                        <h5>{{ move.damage_class.name.charAt(0).toUpperCase() +
+                                            move.damage_class.name.slice(1) }}</h5>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="centered-cell">
+                                    Power
+                                </th>
+                                <td>
+                                    <div *ngIf="move">
+                                        <div *ngIf="move.power; then thenBlock else elseBlock"></div>
+                                        <ng-template #thenBlock>{{move.power}}</ng-template>
+                                        <ng-template #elseBlock>-</ng-template>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="centered-cell">
+                                    Accuracy
+                                </th>
+                                <td>
+                                    <div *ngIf="move && move.accuracy">
+                                        <div *ngIf="move.accuracy; then thenBlock else elseBlock"></div>
+                                        <ng-template #thenBlock>{{move.accuracy}}</ng-template>
+                                        <ng-template #elseBlock>-</ng-template>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="centered-cell">
+                                    PP
+                                </th>
+                                <td>
+                                    <div *ngIf="move && move.pp">
+                                        <p>{{move.pp}}</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="centered-cell">
+                                    Generation Introduced
+                                </th>
+                                <td>
+                                    <div *ngIf="move && move.generation && move.generation.name">
+                                        <h6 style="text-transform: uppercase;">Generation {{
+                                            move.generation.name.split('-')[1] }}</h6>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-8 card-body">
+                <div>
+                    <h3 class="card-text card-body">Description</h3>
+                    <div *ngIf="move">
+                        <div *ngIf="getEnglishDescription(move.flavor_text_entries); then thenBlock3 else elseBlock3"></div>
+                        <ng-template #thenBlock3>
+                            <p>{{ getEnglishDescription(move.flavor_text_entries) }}</p>
+                        </ng-template>
+                        <ng-template #elseBlock3>
+                            <p>No description available</p>
+                        </ng-template>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="card-text card-body">Effects</h3>
+                    <div *ngIf="move">
+                        <div *ngIf="move.effect_entries.length > 0; then thenBlock5 else elseBlock5"></div>
+                        <ng-template #thenBlock5>
+                            <p class="card-text">{{ move.effect_entries[0].effect.replace('$effect_chance',
+                                move.effect_chance).replace('%', '% chance') }}</p>
+                        </ng-template>
+                        <ng-template #elseBlock5>
+                            <p>No effect available</p>
+                        </ng-template>
+
+                    </div>
+                </div>
+                <div>
+                    <h3 class="card-text card-body">Priority</h3>
+                    <div *ngIf="move">
+                        <div *ngIf="move.priority === 0; then thenBlock4 else elseBlock4"></div>
+                        <ng-template #thenBlock4>
+                            <p>This move has no priority.</p>
+                        </ng-template>
+                        <ng-template #elseBlock4>
+                            <p>This move has +{{move.priority}} priority.</p>
+                        </ng-template>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="card-text card-body">Stat changes</h3>
+                    <div *ngIf="move && move.stat_changes">
+                        <div *ngIf="move.stat_changes.length === 0; then thenBlock2 else elseBlock2"></div>
+                        <ng-template #thenBlock2>This move makes no stats changes to the user.</ng-template>
+                        <ng-template #elseBlock2>
+                            <ul *ngFor="let change of move.stat_changes">
+                                <li>
+                                    <p>
+                                        This move makes {{ change.change > 0 ? '+' : '' }}{{ change.change }} in user's
+                                        {{
+                                        change.stat.name }} stat.
+                                    </p>
+                                </li>
+                            </ul>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="card mx-auto my-4" style="width: 100%;">
+            <div *ngIf="move">
+                <h1 class="card-title text-center" style="font-size: 1.5rem;">
+                    Pokemons that can learn {{ move.name.charAt(0).toUpperCase() + move.name.slice(1) }}
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div *ngIf="isLoading"
+                class="col-12 loading-animation d-flex align-items-center justify-content-center text-center">
+                <div class="position-fixed top-50 start-50 translate-middle">
+                    <mat-spinner></mat-spinner>
+                </div>
+            </div>
+            <div *ngIf="!isLoading">
+                <div class="row">
+                    <div *ngIf="move">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-3" *ngFor="let pokemon of move.learned_by_pokemon; let i = index">
+                                    <div class="card card-h mx-auto my-4" style="width: 100%;"
+                                        (click)="redirectToPokemon(pokemon.url)">
+                                        <!-- Contenido de la tarjeta -->
+                                        <div class="card-body text-center">
+                                            <div *ngIf="pokemon && pokemonArray[i]">
+                                                <h1 class="card-title text-center" style="font-size: 1.5rem;">{{
+                                                    pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1) }}</h1>
+                                                <div
+                                                    *ngIf="pokemonArray[i].sprites.front_default; then thenBlock else elseBlock">
+                                                </div>
+                                                <ng-template #thenBlock>
+                                                    <img style="width: 10rem;" class="mx-auto"
+                                                        [src]="pokemonArray[i].sprites.front_default" />
+                                                </ng-template>
+                                                <ng-template #elseBlock>
+                                                    <div
+                                                        *ngIf="pokemonArray[i].sprites['other']['official-artwork']['front_default']; then thenBlock1 else elseBlock1">
+                                                    </div>
+                                                    <ng-template #thenBlock1>
+                                                        <img style="width: 10rem;" class="mx-auto"
+                                                            [src]="pokemonArray[i].sprites['other']['official-artwork']['front_default']" />
+                                                    </ng-template>
+                                                    <ng-template #elseBlock1>
+                                                        <img style="width: 10rem;" class="mx-auto"
+                                                            src='../../../assets/imgs/missing.png' />
+                                                    </ng-template>
+                                                </ng-template>
+                                                <ul class="list-unstyled text-center type-icons">
+                                                    <li *ngFor="let type of pokemonArray[i].types">
+                                                        <div class="icon" [ngClass]="type.type.name">
+                                                            <img
+                                                                [src]="'../../../assets/move_types/' + (type.type.name) + '.svg'" />
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

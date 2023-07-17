@@ -1,0 +1,111 @@
+<div class="container mt-4">
+    <div class="row">
+        <div *ngIf="type && type.name" class="col text-center">
+            <div class="icon" [ngClass]="type.name">
+                <img [src]="'../../../assets/move_types/' + (type.name) + '.svg'" [alt]="type.name" />
+            </div>
+            <h1>{{ type.name.charAt(0).toUpperCase() + type.name.slice(1)}}</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <h2 class="mt-4">Moves</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Move Name</th>
+                            <th>Type</th>
+                            <th>Power</th>
+                            <th>Accuracy</th>
+                            <th>PP</th>
+                            <th>Generation</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="type && type.moves">
+                        <tr *ngFor="let move of type.moves; let i = index;">
+                            <td>{{i}}</td>
+                            <td *ngIf="moveArray[i] && moveArray[i].name">{{ moveArray[i].name.charAt(0).toUpperCase() +
+                                moveArray[i].name.slice(1)}}</td>
+                            <td *ngIf="moveArray[i]">
+                                <div class="icon" [ngClass]="moveArray[i].type.name">
+                                    <img [src]="'../../../assets/move_types/' + (moveArray[i].type.name) + '.svg'"
+                                        [alt]="moveArray[i].type.name" />
+                                </div>
+                            </td>
+                            <td *ngIf="moveArray[i]">{{ moveArray[i].power || '-' }}</td>
+                            <td *ngIf="moveArray[i]">{{ moveArray[i].accuracy || '-' }}</td>
+                            <td *ngIf="moveArray[i] ">{{ moveArray[i].pp || '-' }}</td>
+                            <td style="text-transform: uppercase;" *ngIf="moveArray[i]">
+                                {{moveArray[i].generation.name.split('-')[1]}}
+                            </td>
+                            <td *ngIf="moveArray[i]">
+                                <div
+                                    *ngIf="getEnglishDescription(moveArray[i].flavor_text_entries); then thenBlock2 else elseBlock2">
+                                </div>
+                                <ng-template #thenBlock2>
+                                    {{ getEnglishDescription(moveArray[i].flavor_text_entries) }}
+                                </ng-template>
+                                <ng-template #elseBlock2>
+                                    <p>No description available</p>
+                                </ng-template>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div *ngIf="type && type.name">
+            <h2 class="mt-4">Pokemons that are {{type.name}} type</h2>
+        </div>
+        <div class="row" *ngIf="type && type.pokemon">
+            <div *ngFor="let pokemon of type.pokemon; let i = index" class="col-md-3">
+                <div class="card card-h my-4" (click)="redirectToPokemon(pokemon.pokemon.url)">
+                    <div class="card-body text-center">
+                        <div *ngIf="pokemonArray[i] && pokemonArray[i].name">
+                            <h4 class="card-title">{{ pokemonArray[i].name.charAt(0).toUpperCase() +
+                                pokemonArray[i].name.slice(1)}}</h4>
+                            <div *ngIf="pokemonArray[i].sprites.front_default; then thenBlock else elseBlock">
+                            </div>
+                            <ng-template #thenBlock>
+                                <img style="width: 10rem;" class="mx-auto img-fluid"
+                                    [src]="pokemonArray[i].sprites.front_default" />
+                            </ng-template>
+                            <ng-template #elseBlock>
+                                <div
+                                    *ngIf="pokemonArray[i].sprites['other']['official-artwork']['front_default']; then thenBlock1 else elseBlock1">
+                                </div>
+                                <ng-template #thenBlock1>
+                                    <img style="width: 10rem;" class="mx-auto img-fluid"
+                                        [src]="pokemonArray[i].sprites['other']['official-artwork']['front_default']" />
+                                </ng-template>
+                                <ng-template #elseBlock1>
+                                    <img style="width: 10rem;" class="mx-auto img-fluid"
+                                        src='../../../assets/imgs/missing.png' />
+                                </ng-template>
+                            </ng-template>
+                            <ul class="list-unstyled text-center type-icons">
+                                <li *ngFor="let type of pokemonArray[i].types">
+                                    <div class="icon" [ngClass]="type.type.name">
+                                        <img [src]="'../../../assets/move_types/' + (type.type.name) + '.svg'" />
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="isLoading" class="text-center mt-4 d-flex align-items-center justify-content-center"
+        style="min-height: 50vh;">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>

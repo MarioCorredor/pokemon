@@ -1,0 +1,8 @@
+<h1>All types</h1>
+<div class="wrapper" *ngIf="types && types.results">
+    <div *ngFor="let type of types.results; let i = index">
+        <div class="icon" [ngClass]="type.name" (click)="redirectToType(type.url)">
+            <img [src]="'../../../assets/move_types/' + (type.name) + '.svg'" />
+        </div>
+    </div>
+</div>

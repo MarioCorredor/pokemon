@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="row">
+    <div class="col text-center">
+      <div class="title-box">
+        <h1 class="title" style="color: whitesmoke;">{{ titulo }}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div *ngIf="isLoading"
+      class="col-12 loading-animation d-flex align-items-center justify-content-center text-center">
+      <div class="position-fixed top-50 start-50 translate-middle">
+        <mat-spinner></mat-spinner>
+      </div>
+    </div>
+    <div *ngIf="!isLoading" class="col-12">
+      <div class="row">
+        <div class="mt-5">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" name="search" placeholder="Search..." aria-label="Search..." [(ngModel)]="searchText" (input)="filterPokemons()">
+        </div>
+        <ng-container *ngFor="let pokemon of filteredPokemons; let i = index">
+          <div class="col-3">
+            <div class="card mx-auto my-4" style="width: 100%;" (click)="redirectToPokemon(pokemon.id)">
+              <!-- Contenido de la tarjeta -->
+              <div class="card-body text-center">
+                <h1 class="card-title text-center" style="font-size: 1.5rem;">{{
+                  filteredPokemons[i].name.charAt(0).toUpperCase() + filteredPokemons[i].name.slice(1) }}</h1>
+                <h6 class="card-text text-center">#{{filteredPokemons[i].id}}</h6>
+                <div *ngIf="filteredPokemons[i].sprites.front_default; then thenBlock else elseBlock"></div>
+                <ng-template #thenBlock>
+                  <img style="width: 10rem;" class="mx-auto" [src]="filteredPokemons[i].sprites.front_default" />
+                </ng-template>
+                <ng-template #elseBlock>
+                  <div
+                    *ngIf="filteredPokemons[i].sprites['other']['official-artwork']['front_default']; then thenBlock1 else elseBlock1">
+                  </div>
+                  <ng-template #thenBlock1>
+                    <img style="width: 10rem;" class="mx-auto"
+                      [src]="filteredPokemons[i].sprites['other']['official-artwork']['front_default']" />
+                  </ng-template>
+                  <ng-template #elseBlock1>
+                    <img style="width: 10rem;" class="mx-auto" src='../../../assets/imgs/missing.png' />
+                  </ng-template>
+                </ng-template>
+                <ul class="list-unstyled text-center type-icons">
+                  <li *ngFor="let type of filteredPokemons[i].types">
+                    <div class="icon" [ngClass]="type.type.name">
+                      <img [src]="'../../../assets/move_types/' + (type.type.name) + '.svg'" />
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- Cerrar la fila y abrir una nueva después de cada 4 tarjetas -->
+          <div *ngIf="(i + 1) % 4 === 0" class="w-100"></div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

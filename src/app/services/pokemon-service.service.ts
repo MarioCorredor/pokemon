@@ -10,6 +10,8 @@ import { AType } from '../models/auxType';
 import { PokemonType } from '../models/type';
 import { Species } from '../models/species';
 import { Chain } from '../models/chain';
+import { AItem } from '../models/auxItem';
+import { Item } from '../models/item';
 
 @Injectable({
   providedIn: 'root'
@@ -80,5 +82,19 @@ export class PokemonService {
   //   return this._http.get<Pokemon>(`${this.baseUrl}pokemon/${pokemonId}`).pipe(
   //     map((pokemon: Pokemon) => pokemon.image_url)
   //   );
+
+  getAllItems(): Observable<AItem>{
+    const url = this.baseUrl + "item?limit=100000&offset=0";
+    return this._http.get<AItem>(url);
+  }
+
+  getItemByUrl(url: string): Observable<Item>{
+    return this._http.get<Item>(url);
+  }
+
+  getItemById(itemId: string): Observable<Item>{
+    const url = this.baseUrl + "item/" + itemId;
+    return this._http.get<Item>(url);
+  }
 
 }

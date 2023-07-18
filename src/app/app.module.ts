@@ -20,6 +20,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { ConcreteTypeComponent } from './components/concrete-type/concrete-type.component';
 import { TypeListComponent } from './components/type-list/type-list.component';
 import { FormsModule } from '@angular/forms';
+import { AbilityListComponent } from './components/ability-list/ability-list.component';
+import { ConcreteAbilityComponent } from './components/concrete-ability/concrete-ability.component';
+import { ItemListComponent } from './components/item-list/item-list.component';
+import { ConcreteItemComponent } from './components/concrete-item/concrete-item.component';
 
 
 
@@ -35,7 +39,11 @@ import { FormsModule } from '@angular/forms';
     MovesListComponent,
     ConcreteMoveComponent,
     ConcreteTypeComponent,
-    TypeListComponent
+    TypeListComponent,
+    AbilityListComponent,
+    ConcreteAbilityComponent,
+    ItemListComponent,
+    ConcreteItemComponent
   ],
   imports: [
     BrowserModule,

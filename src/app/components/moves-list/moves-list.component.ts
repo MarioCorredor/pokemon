@@ -100,8 +100,8 @@ export class MovesListComponent {
   filterMoves() {
     this.filteredMoveArray = this.moveArray.filter((move) => {
       const nameMatch = move.name.toLowerCase().includes(this.searchText.toLowerCase());
-      const typeMatch = this.selectedType === '' || move.type.name === this.selectedType;
-      const categoryMatch = this.selectedCategory === '' || move.damage_class.name === this.selectedCategory;
+      const typeMatch = this.selectedType === '' || move.type.name === this.selectedType.toLowerCase();
+      const categoryMatch = this.selectedCategory === '' || move.damage_class.name === this.selectedCategory.toLowerCase();
       return nameMatch && typeMatch && categoryMatch;
     });
 

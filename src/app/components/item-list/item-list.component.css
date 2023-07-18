@@ -1,0 +1,11 @@
+.card:hover {
+    cursor: pointer;
+  }
+  
+  .title-box {
+    background-color: grey;
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    margin-top: 10px;
+  }

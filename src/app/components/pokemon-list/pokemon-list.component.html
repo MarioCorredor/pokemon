@@ -19,11 +19,12 @@
       <div class="row">
         <div class="mt-5">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" name="search" placeholder="Search..." aria-label="Search..." [(ngModel)]="searchText" (input)="filterPokemons()">
+          <input type="text" name="search" placeholder="Search..." aria-label="Search..." [(ngModel)]="searchText"
+            (input)="filterPokemons()">
         </div>
         <ng-container *ngFor="let pokemon of filteredPokemons; let i = index">
           <div class="col-3">
-            <div class="card mx-auto my-4" style="width: 100%;" (click)="redirectToPokemon(pokemon.id)">
+            <div class="card mx-auto my-4" style="width: 100%;" (click)="redirectToPokemon(pokemon.id)" [ngClass]="['color-' + pokemon.types[0].type.name, pokemon.types[1] ? 'border-' + pokemon.types[1].type.name : 'brd-dft']">
               <!-- Contenido de la tarjeta -->
               <div class="card-body text-center">
                 <h1 class="card-title text-center" style="font-size: 1.5rem;">{{
@@ -55,8 +56,6 @@
               </div>
             </div>
           </div>
-          <!-- Cerrar la fila y abrir una nueva después de cada 4 tarjetas -->
-          <div *ngIf="(i + 1) % 4 === 0" class="w-100"></div>
         </ng-container>
       </div>
     </div>

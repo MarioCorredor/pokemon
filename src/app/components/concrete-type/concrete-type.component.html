@@ -1,7 +1,7 @@
 <div class="container mt-4">
     <div class="row">
         <div *ngIf="type && type.name" class="col text-center">
-            <div class="icon" [ngClass]="type.name">
+            <div class="icon" [ngClass]="['i-' + type.name]">
                 <img [src]="'../../../assets/move_types/' + (type.name) + '.svg'" [alt]="type.name" />
             </div>
             <h1>{{ type.name.charAt(0).toUpperCase() + type.name.slice(1)}}</h1>
@@ -31,7 +31,7 @@
                             <td *ngIf="moveArray[i] && moveArray[i].name">{{ moveArray[i].name.charAt(0).toUpperCase() +
                                 moveArray[i].name.slice(1)}}</td>
                             <td *ngIf="moveArray[i]">
-                                <div class="icon" [ngClass]="moveArray[i].type.name">
+                                <div class="icon" [ngClass]="['i-' + moveArray[i].type.name]">
                                     <img [src]="'../../../assets/move_types/' + (moveArray[i].type.name) + '.svg'"
                                         [alt]="moveArray[i].type.name" />
                                 </div>
@@ -66,7 +66,7 @@
         </div>
         <div class="row" *ngIf="type && type.pokemon">
             <div *ngFor="let pokemon of type.pokemon; let i = index" class="col-md-3">
-                <div class="card card-h my-4" (click)="redirectToPokemon(pokemon.pokemon.url)">
+                <div class="card card-h my-4" (click)="redirectToPokemon(pokemon.pokemon.url)" [ngClass]="['color-' + pokemonArray[i].types[0].type.name, pokemonArray[i].types[1] ? 'border-' + pokemonArray[i].types[1].type.name : 'brd-dft']">
                     <div class="card-body text-center">
                         <div *ngIf="pokemonArray[i] && pokemonArray[i].name">
                             <h4 class="card-title">{{ pokemonArray[i].name.charAt(0).toUpperCase() +

@@ -7,6 +7,7 @@
     </div>
   </div>
 </div>
+
 <div class="container">
   <div class="row">
     <div *ngIf="isLoading"
@@ -15,16 +16,30 @@
         <mat-spinner></mat-spinner>
       </div>
     </div>
+
     <div *ngIf="!isLoading" class="col-12">
-      <div class="row">
-        <div class="mt-5">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" name="search" placeholder="Search..." aria-label="Search..." [(ngModel)]="searchText"
-            (input)="filterPokemons()">
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <h5>Filter by Name:</h5>
+          <input type="text" class="form-control" name="search" placeholder="Search..." [(ngModel)]="searchText" (input)="filterPokemons()">
+        </div>             
+
+        <div class="col-md-6">
+          <h5>Filter by Type:</h5>
+          <div class="filter-container">
+            <select id="typeFilter" class="form-select" [(ngModel)]="selectedType" (change)="filterPokemons()">
+              <option value="">All</option>
+              <option *ngFor="let type of pokemonTypes" [value]="type">{{ type }}</option>
+            </select>
+          </div>
         </div>
+      </div>
+
+      <div class="row">
         <ng-container *ngFor="let pokemon of filteredPokemons; let i = index">
           <div class="col-3">
-            <div class="card mx-auto my-4" style="width: 100%;" (click)="redirectToPokemon(pokemon.id)" [ngClass]="['color-' + pokemon.types[0].type.name, pokemon.types[1] ? 'border-' + pokemon.types[1].type.name : 'brd-dft']">
+            <div class="card mx-auto my-4" style="width: 100%;" (click)="redirectToPokemon(pokemon.id)"
+              [ngClass]="['color-' + pokemon.types[0].type.name, pokemon.types[1] ? 'border-' + pokemon.types[1].type.name : 'brd-dft']">
               <!-- Contenido de la tarjeta -->
               <div class="card-body text-center">
                 <h1 class="card-title text-center" style="font-size: 1.5rem;">{{

@@ -178,7 +178,7 @@
                             <div class="row">
                                 <div class="col-3" *ngFor="let pokemon of move.learned_by_pokemon; let i = index">
                                     <div class="card card-h mx-auto my-4" style="width: 100%;"
-                                        (click)="redirectToPokemon(pokemon.url)">
+                                        (click)="redirectToPokemon(pokemon.url)" [ngClass]="['color-' + pokemonArray[i].types[0].type.name, pokemonArray[i].types[1] ? 'border-' + pokemonArray[i].types[1].type.name : 'brd-dft']">
                                         <!-- Contenido de la tarjeta -->
                                         <div class="card-body text-center">
                                             <div *ngIf="pokemon && pokemonArray[i]">
@@ -206,7 +206,7 @@
                                                 </ng-template>
                                                 <ul class="list-unstyled text-center type-icons">
                                                     <li *ngFor="let type of pokemonArray[i].types">
-                                                        <div class="icon" [ngClass]="type.type.name">
+                                                        <div class="icon" [ngClass]="['i-'+type.type.name]">
                                                             <img
                                                                 [src]="'../../../assets/move_types/' + (type.type.name) + '.svg'" />
                                                         </div>

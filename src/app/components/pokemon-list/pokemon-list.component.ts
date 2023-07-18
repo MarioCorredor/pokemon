@@ -17,6 +17,29 @@ export class PokemonListComponent {
   public isLoading: Boolean;
   public searchText: string = '';
   public filteredPokemons: Pokemon[] = [];
+  public selectedType: string = '';
+
+  pokemonTypes: string[] = [
+    'Normal',
+    'Fire',
+    'Water',
+    'Grass',
+    'Electric',
+    'Ice',
+    'Fighting',
+    'Poison',
+    'Ground',
+    'Flying',
+    'Psychic',
+    'Bug',
+    'Rock',
+    'Ghost',
+    'Dark',
+    'Dragon',
+    'Steel',
+    'Fairy',
+  ];
+
 
   constructor(
     private _pokemonService: PokemonService,
@@ -73,8 +96,15 @@ export class PokemonListComponent {
 
   filterPokemons() {
     const searchText = this.searchText.toLowerCase();
-    this.filteredPokemons = this.pokemonArray.filter(pokemon => pokemon.name.toLowerCase().includes(searchText));
+    const selectedType = this.selectedType.toLowerCase();
+  
+    this.filteredPokemons = this.pokemonArray.filter(pokemon => {
+      const nameMatches = pokemon.name.toLowerCase().includes(searchText);
+      const typeMatches = !selectedType || pokemon.types.some(type => type.type.name.toLowerCase() === selectedType);
+      return nameMatches && typeMatches;
+    });
   }
+  
 
   redirectToPokemon(pokemonId: number) {
     this._router.navigate([`list/pokemons/${pokemonId}`]);

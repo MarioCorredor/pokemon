@@ -37,6 +37,7 @@ export class MovesListComponent {
 
   ngOnInit(): void {
     this.getAllMoves();
+    this.sortBy = "id"; 
   }
 
   getAllMoves() {
@@ -110,7 +111,7 @@ export class MovesListComponent {
 
   sortMoves() {
     if (this.sortBy === 'id') {
-      this.filteredMoveArray.sort((a, b) => a.id.localeCompare(b.id));
+      this.filteredMoveArray.sort((a, b) => parseInt(a.id) - parseInt(b.id));
     } else if (this.sortBy === 'name') {
       this.filteredMoveArray.sort((a, b) => a.name.localeCompare(b.name));
     } else if (this.sortBy === 'type') {
@@ -119,5 +120,6 @@ export class MovesListComponent {
       this.filteredMoveArray.sort((a, b) => a.damage_class.name.localeCompare(b.damage_class.name));
     }
   }
+  
 
 }

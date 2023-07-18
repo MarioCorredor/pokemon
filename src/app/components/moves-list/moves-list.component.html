@@ -52,7 +52,7 @@
 
             <div *ngIf="!isLoading">
                 <div class="table-responsive">
-                    <table class="table table-striped table-bordered mt-3">
+                    <table class="table table-bordered mt-3">
                         <thead>
                             <tr>
                                 <!-- Add 'text-center' class to center the text in table headers -->
@@ -69,25 +69,25 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let move of filteredMoveArray; let i = index">
-                                <td>{{move.id}}</td>
-                                <td (click)="redirectToMove(move.id)">
+                                <td [ngClass]="['t-'+ move.type.name]">{{move.id}}</td>
+                                <td (click)="redirectToMove(move.id)" [ngClass]="['t-'+ move.type.name]">
                                     <a class="clickable-move">{{ move.name.charAt(0).toUpperCase() + move.name.slice(1)
                                         }}</a>
                                 </td>
-                                <td>
+                                <td [ngClass]="['t-'+ move.type.name]">
                                     <div class="icon" [ngClass]="move.type.name"
                                         (click)="redirectToType(move.type.url)">
                                         <img [src]="'../../../assets/move_types/' + (move.type.name) + '.svg'"
                                             [alt]="move.type.name" />
                                     </div>
                                 </td>
-                                <td>
+                                <td [ngClass]="['t-'+ move.type.name]">
                                     <div>
                                         <img [src]="'../../../assets/move_categories/' + (move.damage_class.name) + '.png'"
                                             [alt]="move.damage_class.name" />
                                     </div>
                                 </td>
-                                <td>
+                                <td [ngClass]="['t-'+ move.type.name]">
                                     <div *ngIf="moveArray[i].power; then thenBlock else elseBlock"></div>
                                     <ng-template #thenBlock>
                                         {{ moveArray[i].power }}
@@ -96,7 +96,7 @@
                                         <p>-</p>
                                     </ng-template>
                                 </td>
-                                <td>
+                                <td [ngClass]="['t-'+ move.type.name]">
                                     <div *ngIf="moveArray[i].accuracy; then thenBlock1 else elseBlock1"></div>
                                     <ng-template #thenBlock1>
                                         {{ moveArray[i].accuracy }}
@@ -105,13 +105,13 @@
                                         <p>-</p>
                                     </ng-template>
                                 </td>
-                                <td>
+                                <td [ngClass]="['t-'+ move.type.name]">
                                     {{ moveArray[i].pp }}
                                 </td>
-                                <td style="text-transform: uppercase;">
+                                <td style="text-transform: uppercase;" [ngClass]="['t-'+ move.type.name]">
                                     {{moveArray[i].generation.name.split('-')[1]}}
                                 </td>
-                                <td>
+                                <td [ngClass]="['t-'+ move.type.name]">
                                     <div
                                         *ngIf="getEnglishDescription(moveArray[i].flavor_text_entries); then thenBlock2 else elseBlock2">
                                     </div>

@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { concatAll, finalize, forkJoin } from 'rxjs';
 import { Move } from 'src/app/models/Move';
+import { AItem } from 'src/app/models/auxItem';
+import { ASpecies } from 'src/app/models/auxSpecies';
 import { Chain } from 'src/app/models/chain';
+import { Item } from 'src/app/models/item';
 import { Pokemon } from 'src/app/models/pokemon';
 import { Species } from 'src/app/models/species';
 import { PokemonService } from 'src/app/services/pokemon-service.service';
@@ -17,11 +20,15 @@ export class ConcretePokemonComponent implements OnInit {
 
   public parametro: any;
   public pokemon!: Pokemon;
+  public pokemonArray: Pokemon[] = [];
   public moveArray: Move[] = [];
+  public aSpeciesArray: ASpecies[] = [];
   public speciesArray: Species[] = [];
   public species!: Species;
   public isLoading: Boolean;
   public chain!: Chain;
+  public itemArray: Item[] = [];
+  public aItem!: AItem;
 
   public baseUrl = environment.baseUrl;
 
@@ -37,6 +44,7 @@ export class ConcretePokemonComponent implements OnInit {
     });
     if (this.parametro != null) {
       this.getPokemonById(this.parametro);
+      this.getAllItems();
     }
   }
 
@@ -104,9 +112,21 @@ export class ConcretePokemonComponent implements OnInit {
         if (chainData) {
           this.chain = chainData;
           console.log("Chain", this.chain);
+          if (this.chain.chain.evolves_to != null) {
+            this.aSpeciesArray.push(this.chain.chain.species);
+            for (let i = 0; i < this.chain.chain.evolves_to.length; i++) {
+              this.aSpeciesArray.push(this.chain.chain.evolves_to[i].species);
+              if (this.chain.chain.evolves_to[i].evolves_to != null) {
+                for (let j = 0; j < this.chain.chain.evolves_to[i].evolves_to.length; j++) {
+                  this.aSpeciesArray.push(this.chain.chain.evolves_to[i].evolves_to[j].species);
+                }
+              }
+            }
+          }
+          console.log("aSpeciesArray:", this.aSpeciesArray);
 
-          // Llamada recursiva para obtener todas las especies anidadas en la cadena
-          this.getAllNestedSpecies(this.chain);
+          // Get species data for all species in the chain
+          this.getSpecies();
         } else {
           console.log("Datos inválidos:", chainData);
         }
@@ -115,6 +135,95 @@ export class ConcretePokemonComponent implements OnInit {
         console.log("ERRRRRRR:", errores);
       }
     );
+  }
+
+  getAllItems() {
+    this._pokemonService.getAllItems().subscribe(
+      (data: AItem) => {
+        this.aItem = data;
+        const observablesItems = this.aItem.results.map(item =>
+          this._pokemonService.getItemByUrl(item.url)
+        );
+
+        forkJoin(observablesItems).pipe(
+          concatAll(),
+          finalize(() => {
+            this.isLoading = false;
+          })
+        ).subscribe(
+          itemData => {
+            if (itemData && itemData.name) {
+              this.itemArray.push(itemData);
+            } else {
+              console.log("Invalid data:", itemData);
+            }
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+  
+
+  getSpecies() {
+    for (let i = 0; i < this.aSpeciesArray.length; i++) {
+      this._pokemonService.getSpeciesByUrl(this.aSpeciesArray[i].url).subscribe(
+        data => {
+          this.speciesArray.push(data);
+          console.log("speciesArray", this.speciesArray);
+          this.getPokemons();
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    }
+
+  }
+
+  getPokemons() {
+    for (let i = 0; i < this.speciesArray.length; i++) {
+      const pokemonUrl = this.speciesArray[i].varieties[0].pokemon.url;
+      this._pokemonService.getPokemonByUrl(pokemonUrl).subscribe(
+        data => {
+          // Check if the Pokémon already exists in pokemonArray
+          const existingPokemon = this.pokemonArray.find(pokemon => pokemon.id === data.id);
+
+          // If the Pokémon does not exist in the array, add it
+          if (!existingPokemon) {
+            this.pokemonArray.push(data);
+            console.log("pokemonArray", this.pokemonArray);
+          }
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    }
+  }
+
+  findPokemonInArray(pokename: string){
+    let res: number = 0;
+    for(let i=0; i<this.pokemonArray.length;i++){
+      if(this.pokemonArray[i].name == pokename){
+        res = i;
+      }
+    }
+    return res;
+  }
+
+  findImageByName(itemName: string){
+    let res: number = 0;
+    const foundItem = this.itemArray.find(item => item.name === itemName);
+    if(foundItem){
+      res = foundItem.id - 1;
+    }
+    return res;
   }
 
   redirectplus() {
@@ -146,43 +255,4 @@ export class ConcretePokemonComponent implements OnInit {
       this._pokemonService.getTypeById(typeId);
     }
   }
-
-  getAllNestedSpecies(chain: Chain) {
-    if (chain) {
-      this._pokemonService.getSpeciesByUrl(chain.chain.species.url).subscribe(
-        speciesData => {
-          if (speciesData && speciesData.name) {
-            console.log("Nested Species:", speciesData);
-  
-            // Guardar la especie anidada si es necesario
-            this.speciesArray.push(speciesData);
-  
-            // Obtener la URL de la imagen del Pokémon y actualizar la propiedad 'imageUrl'
-            // this.getPokemonImage(speciesData).subscribe(
-            //   imageUrl => {
-            //     speciesData.imageUrl = imageUrl;
-            //   },
-            //   error => {
-            //     // Si ocurre un error al obtener la imagen, puedes establecer una URL de imagen de reemplazo o dejarla como 'undefined'.
-            //     speciesData.imageUrl = 'URL_DE_REEMPLAZO_O_UNDEFINED';
-            //   }
-            // );
-  
-            // Llamada recursiva para seguir obteniendo especies anidadas
-            if (chain.chain.evolves_to && chain.chain.evolves_to.length > 0) {
-              for (const evolvesToChain of chain.chain.evolves_to) {
-                this.getAllNestedSpecies(evolvesToChain);
-              }
-            }
-          } else {
-            console.log("Datos inválidos:", speciesData);
-          }
-        },
-        errores => {
-          console.log("ERRRRRRR:", errores);
-        }
-      );
-    }
-  }
-  
 }

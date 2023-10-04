@@ -1,56 +1,72 @@
-<div class="container">
-    <div class="card mx-auto my-4">
+<div *ngIf="isLoading" class="loading-animation d-flex align-items-center justify-content-center">
+    <div class="position-fixed top-50 start-50 translate-middle">
+        <app-loader></app-loader>
+    </div>
+</div>
+<div *ngIf="!isLoading" class="col-12">
+    <div class="container">
         <div class="row">
-            <div *ngIf="item">
-                <h1 class="col card-title text-center mt-4">
-                    {{ item.name.charAt(0).toUpperCase() + item.name.slice(1) }}
-                </h1>
+            <div class="card mx-auto my-4">
+                <div class="row">
+                    <div *ngIf="item">
+                        <h1 class="col card-title text-center mt-4">
+                            {{ item.name.charAt(0).toUpperCase() + item.name.slice(1) }}
+                        </h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-5">
+                        <div class="card mx-4 my-4">
+                            <h3 class="card-title text-center mt-4">
+                                <div *ngIf="item">
+                                    {{ item.name.charAt(0).toUpperCase() + item.name.slice(1) }}
+                                </div>
+                            </h3>
+                            <div *ngIf="item">
+                                <div class="d-flex justify-content-center">
+                                    <!-- Use 'd-flex' and 'justify-content-center' classes for image centering -->
+                                    <div *ngIf="item.sprites.default != null; then thenBlock; else elseBlock"></div>
+                                    <ng-template #thenBlock>
+                                        <img [src]="item.sprites.default" style="width: 5rem;">
+                                    </ng-template>
+                                    <ng-template #elseBlock>
+                                        <img src='../../../assets/imgs/missing.png' style="width: 5rem;">
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngIf="item">
+                                        <td>{{ item.category.name.charAt(0).toUpperCase() + item.category.name.slice(1)
+                                            }}
+                                        </td>
+                                        <td>{{ item.cost }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <h5 class="card-text text-center">Attributes</h5>
+                            <ul class="list-group text-center" *ngIf="item">
+                                <li class="list-group-item" *ngFor="let att of item.attributes">
+                                    {{ att.name.charAt(0).toUpperCase() + att.name.slice(1) }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-7">
+
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-5">
-                <div class="card mx-4 my-4">
-                    <h3 class="card-title text-center mt-4">
-                        <div *ngIf="item">
-                            {{ item.name.charAt(0).toUpperCase() + item.name.slice(1) }}
-                        </div>
-                    </h3>
-                    <div *ngIf="item">
-                        <div class="d-flex justify-content-center"> <!-- Use 'd-flex' and 'justify-content-center' classes for image centering -->
-                            <div *ngIf="item.sprites.default != null; then thenBlock; else elseBlock"></div>
-                            <ng-template #thenBlock>
-                                <img [src]="item.sprites.default" style="width: 5rem;">
-                            </ng-template>
-                            <ng-template #elseBlock>
-                                <img src='../../../assets/imgs/missing.png' style="width: 5rem;">
-                            </ng-template>
-                        </div>
-                    </div>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Cost</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngIf="item">
-                                <td>{{ item.category.name.charAt(0).toUpperCase() + item.category.name.slice(1) }}</td>
-                                <td>{{ item.cost }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <h5 class="card-text text-center">Attributes</h5>
-                    <ul class="list-group text-center" *ngIf="item">
-                        <li class="list-group-item" *ngFor="let att of item.attributes">
-                            {{ att.name.charAt(0).toUpperCase() + att.name.slice(1) }}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-7">
-
+            <div class="card mx-auto my-4">
+                
             </div>
         </div>
     </div>
-</div>

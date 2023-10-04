@@ -1,28 +1,27 @@
 <div class="container">
   <div class="row">
-    <div class="col text-center">
-      <div class="title-box">
-        <h1 class="title" style="color: whitesmoke;">{{ titulo }}</h1>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="row">
-    <div *ngIf="isLoading"
-      class="col-12 loading-animation d-flex align-items-center justify-content-center text-center">
+    <div *ngIf="isLoading" class="loading-animation d-flex align-items-center justify-content-center">
       <div class="position-fixed top-50 start-50 translate-middle">
-        <mat-spinner></mat-spinner>
+        <app-loader></app-loader>
       </div>
     </div>
 
     <div *ngIf="!isLoading" class="col-12">
+      <div class="container">
+        <div class="row">
+          <div class="col text-center">
+            <div class="title-box">
+              <h1 class="title" style="color: whitesmoke;">{{ titulo }}</h1>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="row mt-4">
         <div class="col-md-6">
-          <h5>Filter by Name:</h5>
-          <input type="text" class="form-control" name="search" placeholder="Search..." [(ngModel)]="searchText" (input)="filterPokemons()">
-        </div>             
+          <h5>Filter by Name or ID:</h5>
+          <input type="text" class="form-control" name="search" placeholder="Search..." [(ngModel)]="searchText"
+            (input)="filterPokemons()">
+        </div>
 
         <div class="col-md-6">
           <h5>Filter by Type:</h5>

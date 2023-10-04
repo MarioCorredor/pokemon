@@ -8,4 +8,6 @@ export interface Pokemon {
     sprites: any,
     species : {name: string, url: string},
     url: string;
+    height: number,
+    weight: number
 }

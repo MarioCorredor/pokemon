@@ -1,27 +1,74 @@
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.card-item {
+  flex-basis: calc(16.666% - 20px);
+  margin-right: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.gender-differences-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.gender-differences-container .group1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gender-differences-container .group2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .clickable-move {
     color: blue;
     text-decoration: underline;
     cursor: pointer;
-  }
+}
+.clickable{
+    cursor: pointer;
+}
+
+.clickable-ability {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .type-icons {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  .type-icons li {
-    margin-right: 5px; /* Ajusta el margen según sea necesario */
+}
+
+.type-icons li {
+    margin-right: 5px;
+    /* Ajusta el margen según sea necesario */
     margin-left: 5px;
-  }
-  
+}
+
 .icon {
     border-radius: 100%;
     height: 50px;
     width: 50px;
-    margin:auto;
+    margin: auto;
 }
 
-.icon:hover{
+.icon:hover {
     cursor: pointer;
 }
 
@@ -120,3 +167,112 @@
     background: #539DDF;
     /* box-shadow: 0 0 20px #539DDF; */
 }
+
+
+.t-bug {
+    background-color: #92BC2C;
+    /* box-shadow: 0 0 20px #92BC2C; */
+    color: white;
+  }
+  
+  .t-dark {
+    background-color: #595761;
+    /* box-shadow: 0 0 20px #595761; */
+    color: white;
+  }
+  
+  .t-dragon {
+    background-color: #0C69C8;
+    /* box-shadow: 0 0 20px #0C69C8; */
+    color: white;
+  }
+  
+  .t-electric {
+    background-color: #F2D94E;
+    /* box-shadow: 0 0 20px #F2D94E; */
+    /* color: white; */
+  }
+  
+  .t-fire {
+    background-color: #FBA54C;
+    /* box-shadow: 0 0 20px #FBA54C; */
+    color: white;
+  }
+  
+  .t-fairy {
+    background-color: #EE90E6;
+    /* box-shadow: 0 0 20px #EE90E6; */
+    color: white;
+  }
+  
+  .t-fighting {
+    background-color: #D3425F;
+    /* box-shadow: 0 0 20px #D3425F; */
+    color: white;
+  }
+  
+  .t-flying {
+    background-color: #A1BBEC;
+    /* box-shadow: 0 0 20px #A1BBEC; */
+    color: white;
+  }
+  
+  .t-ghost {
+    background-color: #5F6DBC;
+    /* box-shadow: 0 0 20px #5F6DBC; */
+    color: white;
+  }
+  
+  .t-grass {
+    background-color: #5FBD58;
+    /* box-shadow: 0 0 20px #5FBD58; */
+    color: white;
+  }
+  
+  .t-ground {
+    background-color: #DA7C4D;
+    /* box-shadow: 0 0 20px #DA7C4D; */
+    color: white;
+  }
+  
+  .t-ice {
+    background-color: #75D0C1;
+    /* box-shadow: 0 0 20px #75D0C1; */
+    /* color: white; */
+  }
+  
+  .t-normal {
+    background-color: #A0A29F;
+    /* box-shadow: 0 0 20px #A0A29F; */
+    color: white;
+  }
+  
+  .t-poison {
+    background-color: #B763CF;
+    /* box-shadow: 0 0 20px #B763CF; */
+    color: white;
+  }
+  
+  .t-psychic {
+    background-color: #FA8581;
+    /* box-shadow: 0 0 20px #FA8581; */
+    color: white;
+  }
+  
+  .t-rock {
+    background-color: #C9BB8A;
+    /* box-shadow: 0 0 20px #C9BB8A; */
+    color: white;
+  }
+  
+  .t-steel {
+    background-color: #5695A3;
+    /* box-shadow: 0 0 20px #5695A3; */
+    color: white;
+  }
+  
+  .t-water {
+    background-color: #539DDF;
+    /* box-shadow: 0 0 20px #539DDF; */
+    color: white;
+  }

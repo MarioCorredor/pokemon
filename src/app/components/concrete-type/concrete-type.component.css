@@ -10,6 +10,14 @@
   margin-left: 5px;
 }
 
+.clickable-move {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.clickable {
+  cursor: pointer;
+}
 
 .card-h:hover {
   cursor: pointer;
@@ -394,4 +402,112 @@
 
 .brd-dft {
   border: 4px solid black;
+}
+
+.t-bug {
+  background-color: #92BC2C;
+  /* box-shadow: 0 0 20px #92BC2C; */
+  color: white;
+}
+
+.t-dark {
+  background-color: #595761;
+  /* box-shadow: 0 0 20px #595761; */
+  color: white;
+}
+
+.t-dragon {
+  background-color: #0C69C8;
+  /* box-shadow: 0 0 20px #0C69C8; */
+  color: white;
+}
+
+.t-electric {
+  background-color: #F2D94E;
+  /* box-shadow: 0 0 20px #F2D94E; */
+  /* color: white; */
+}
+
+.t-fire {
+  background-color: #FBA54C;
+  /* box-shadow: 0 0 20px #FBA54C; */
+  color: white;
+}
+
+.t-fairy {
+  background-color: #EE90E6;
+  /* box-shadow: 0 0 20px #EE90E6; */
+  color: white;
+}
+
+.t-fighting {
+  background-color: #D3425F;
+  /* box-shadow: 0 0 20px #D3425F; */
+  color: white;
+}
+
+.t-flying {
+  background-color: #A1BBEC;
+  /* box-shadow: 0 0 20px #A1BBEC; */
+  color: white;
+}
+
+.t-ghost {
+  background-color: #5F6DBC;
+  /* box-shadow: 0 0 20px #5F6DBC; */
+  color: white;
+}
+
+.t-grass {
+  background-color: #5FBD58;
+  /* box-shadow: 0 0 20px #5FBD58; */
+  color: white;
+}
+
+.t-ground {
+  background-color: #DA7C4D;
+  /* box-shadow: 0 0 20px #DA7C4D; */
+  color: white;
+}
+
+.t-ice {
+  background-color: #75D0C1;
+  /* box-shadow: 0 0 20px #75D0C1; */
+  /* color: white; */
+}
+
+.t-normal {
+  background-color: #A0A29F;
+  /* box-shadow: 0 0 20px #A0A29F; */
+  color: white;
+}
+
+.t-poison {
+  background-color: #B763CF;
+  /* box-shadow: 0 0 20px #B763CF; */
+  color: white;
+}
+
+.t-psychic {
+  background-color: #FA8581;
+  /* box-shadow: 0 0 20px #FA8581; */
+  color: white;
+}
+
+.t-rock {
+  background-color: #C9BB8A;
+  /* box-shadow: 0 0 20px #C9BB8A; */
+  color: white;
+}
+
+.t-steel {
+  background-color: #5695A3;
+  /* box-shadow: 0 0 20px #5695A3; */
+  color: white;
+}
+
+.t-water {
+  background-color: #539DDF;
+  /* box-shadow: 0 0 20px #539DDF; */
+  color: white;
 }

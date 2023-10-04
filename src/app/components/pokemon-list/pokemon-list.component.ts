@@ -100,10 +100,13 @@ export class PokemonListComponent {
   
     this.filteredPokemons = this.pokemonArray.filter(pokemon => {
       const nameMatches = pokemon.name.toLowerCase().includes(searchText);
+      const idMatches = (searchText) && parseInt(searchText) === pokemon.id;
       const typeMatches = !selectedType || pokemon.types.some(type => type.type.name.toLowerCase() === selectedType);
-      return nameMatches && typeMatches;
+      
+      return (nameMatches || idMatches) && typeMatches;
     });
   }
+  
   
 
   redirectToPokemon(pokemonId: number) {

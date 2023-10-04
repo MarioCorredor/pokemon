@@ -45,6 +45,7 @@ export class MovesListComponent {
       data => {
         console.log("Response:", data);
         this.moves = data;
+
         const observables = data.results.map(result =>
           this._pokemonService.getMoveByUrl(result.url)
         );
@@ -105,7 +106,6 @@ export class MovesListComponent {
       const categoryMatch = this.selectedCategory === '' || move.damage_class.name === this.selectedCategory.toLowerCase();
       return nameMatch && typeMatch && categoryMatch;
     });
-
     this.sortMoves();
   }
 

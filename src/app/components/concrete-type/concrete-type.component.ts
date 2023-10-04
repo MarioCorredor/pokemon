@@ -50,9 +50,7 @@ export class ConcreteTypeComponent {
           this._pokemonService.getMoveByUrl(result.url)
         );
         forkJoin(observablesPkmn).pipe(
-          concatAll(),finalize(() => {
-            this.isLoading = false; // Ocultar animación de carga cuando las peticiones se completen
-          })
+          concatAll()
         ).subscribe(
           datos => {
             if (datos && datos.name) {
@@ -66,9 +64,7 @@ export class ConcreteTypeComponent {
           }
         );
         forkJoin(observablesMvs).pipe(
-          concatAll(),finalize(() => {
-            this.isLoading = false; // Ocultar animación de carga cuando las peticiones se completen
-          })
+          concatAll()
         ).subscribe(
           datos => {
             if (datos && datos.name) {
@@ -88,6 +84,7 @@ export class ConcreteTypeComponent {
     );
     console.log("MoveArray:",this.moveArray);
     console.log("PokemonArray:",this.pokemonArray);
+    this.isLoading = false;
   }
 
   redirectToPokemon(url: string) {
@@ -97,6 +94,16 @@ export class ConcreteTypeComponent {
       const pokemonId = match[1];
       this._router.navigate([`list/pokemons/${pokemonId}`]);
       this._pokemonService.getPokemonById(pokemonId);
+    }
+  }
+
+  redirectToMove(url: string) {
+    const regex = /\/(\d+)\/$/;
+    const match = url.match(regex);
+    if (match && match.length > 1) {
+      const moveId = match[1];
+      this._router.navigate([`moves/${moveId}`]);
+      this._pokemonService.getMoveById(moveId);
     }
   }
 

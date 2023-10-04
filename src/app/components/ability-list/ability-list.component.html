@@ -1,1 +1,51 @@
-<p>ability-list works!</p>
+<div *ngIf="isLoading" class="loading-animation d-flex align-items-center justify-content-center">
+    <div class="position-fixed top-50 start-50 translate-middle">
+        <app-loader></app-loader>
+    </div>
+</div>
+<div *ngIf="!isLoading">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <div class="title-box">
+                    <h1 class="title" style="color: whitesmoke;">{{ titulo }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col">
+                <h5>Filter by Name:</h5>
+                <input type="text" class="form-control" name="search" placeholder="Search..." [(ngModel)]="searchText"
+                    (input)="filterAbilities()">
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover mt-3">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>
+                                    Effect
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let ability of filteredAbilities; let i = index" (click)="redirectToAbility(ability.id)">
+                                <td>{{ability.id}}</td>
+                                <td>{{ ability.name.charAt(0).toUpperCase() + ability.name.slice(1)}}</td>
+                                <td>{{getAbilityEffect(ability.effect_entries) ? getAbilityEffect(ability.effect_entries) : 'No effect available'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

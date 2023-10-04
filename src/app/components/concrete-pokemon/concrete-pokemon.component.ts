@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { concatAll, finalize, forkJoin } from 'rxjs';
 import { Move } from 'src/app/models/Move';
@@ -29,6 +29,9 @@ export class ConcretePokemonComponent implements OnInit {
   public chain!: Chain;
   public itemArray: Item[] = [];
   public aItem!: AItem;
+  public varArray: string[] = [];
+  public varPokeArray: Pokemon[] = [];
+  public genderArray: string[] = [];
 
   public baseUrl = environment.baseUrl;
 
@@ -39,13 +42,17 @@ export class ConcretePokemonComponent implements OnInit {
   ) { this.isLoading = true; }
 
   ngOnInit(): void {
-    this._route.params.forEach((params: Params) => {
-      this.parametro = params["id"];
-    });
-    if (this.parametro != null) {
-      this.getPokemonById(this.parametro);
+    this.isLoading = true;
+    this.aSpeciesArray = [];
+    this.speciesArray = [];
+    this.varArray = [];
+    this.varPokeArray = [];
+    this.genderArray = [];
+    this._route.params.subscribe(params => {
+      const pokemonId = params['id'];
+      this.getPokemonById(pokemonId);
       this.getAllItems();
-    }
+    });
   }
 
   getPokemonById(pokemonId: string) {
@@ -61,10 +68,7 @@ export class ConcretePokemonComponent implements OnInit {
         const observablesSpecies = this._pokemonService.getSpeciesByUrl(data.species.url);
 
         forkJoin(observablesMoves).pipe(
-          concatAll(),
-          finalize(() => {
-            this.isLoading = false;
-          })
+          concatAll()
         ).subscribe(
           datos => {
             if (datos && datos.name) {
@@ -79,10 +83,7 @@ export class ConcretePokemonComponent implements OnInit {
         );
 
         forkJoin(observablesSpecies).pipe(
-          concatAll(),
-          finalize(() => {
-            this.isLoading = false;
-          })
+          concatAll()
         ).subscribe(
           speciesData => {
             if (speciesData && speciesData.name) {
@@ -146,10 +147,7 @@ export class ConcretePokemonComponent implements OnInit {
         );
 
         forkJoin(observablesItems).pipe(
-          concatAll(),
-          finalize(() => {
-            this.isLoading = false;
-          })
+          concatAll()
         ).subscribe(
           itemData => {
             if (itemData && itemData.name) {
@@ -168,14 +166,13 @@ export class ConcretePokemonComponent implements OnInit {
       }
     );
   }
-  
+
 
   getSpecies() {
     for (let i = 0; i < this.aSpeciesArray.length; i++) {
       this._pokemonService.getSpeciesByUrl(this.aSpeciesArray[i].url).subscribe(
         data => {
           this.speciesArray.push(data);
-          console.log("speciesArray", this.speciesArray);
           this.getPokemons();
         },
         err => {
@@ -183,7 +180,8 @@ export class ConcretePokemonComponent implements OnInit {
         }
       );
     }
-
+    console.log("speciesArray", this.speciesArray);
+    this.getOtherVarieties(this.species.varieties);
   }
 
   getPokemons() {
@@ -197,7 +195,7 @@ export class ConcretePokemonComponent implements OnInit {
           // If the Pokémon does not exist in the array, add it
           if (!existingPokemon) {
             this.pokemonArray.push(data);
-            console.log("pokemonArray", this.pokemonArray);
+
           }
         },
         err => {
@@ -205,35 +203,112 @@ export class ConcretePokemonComponent implements OnInit {
         }
       );
     }
+    console.log("pokemonArray", this.pokemonArray);
   }
 
-  findPokemonInArray(pokename: string){
-    let res: number = 0;
-    for(let i=0; i<this.pokemonArray.length;i++){
-      if(this.pokemonArray[i].name == pokename){
+  findPokemonInArray(pokename: string) {
+    let res: number = 1;
+    for (let i = 0; i < this.pokemonArray.length; i++) {
+      if (this.pokemonArray[i].name == pokename) {
         res = i;
       }
     }
     return res;
   }
 
-  findImageByName(itemName: string){
+  findImageByName(itemName: string) {
     let res: number = 0;
     const foundItem = this.itemArray.find(item => item.name === itemName);
-    if(foundItem){
+    if (foundItem) {
       res = foundItem.id - 1;
     }
     return res;
   }
 
-  redirectplus() {
-    this._router.navigate(["list/pokemons/" + (this.pokemon.id + 1)]);
-    this.getPokemonById(String(this.pokemon.id + 1));
+  getEnglishDescription(flavorTextEntries: any[]): string {
+    for (let i = 0; i < flavorTextEntries.length; i++) {
+      const entry = flavorTextEntries[i];
+      if (entry.language.name === 'en') {
+        // Utilizamos una expresión regular para eliminar caracteres no alfanuméricos
+        return entry.flavor_text.replace(/[^a-zA-Z0-9 ]/g, ' ');
+      }
+    }
+    return '';
+  }
+  
+
+  getOtherVarieties(varieties: any[]) {
+    for (let i = 0; i < varieties.length; i++) {
+      if (this.pokemon.name != varieties[i].pokemon.name) {
+        this.varArray.push(varieties[i].pokemon.name);
+        this._pokemonService.getPokemonByUrl(varieties[i].pokemon.url).subscribe(
+          data => { this.varPokeArray.push(data) },
+          err => {
+            console.log(err);
+          }
+        )
+      }
+    }
+    console.log("varPokeArray:", this.varPokeArray);
+    console.log("varArray:", this.varArray);
+    this.isLoading = false;
+    return this.varArray;
   }
 
-  redirectminus() {
-    this._router.navigate(["list/pokemons/" + (this.pokemon.id - 1)]);
-    this.getPokemonById(String(this.pokemon.id - 1));
+  getPokemonGenderInfo(genderRate: number){
+    switch (genderRate) {
+      case -1:
+        return null;
+      case 0:
+        this.genderArray.push("0%");
+        this.genderArray.push("100%");
+        return null;
+      case 1:
+        this.genderArray.push("12.5%");
+        this.genderArray.push("87.5%");
+        return null; 
+      case 2:
+        this.genderArray.push("25%");
+        this.genderArray.push("75%");
+        return null; 
+      case 3:
+        this.genderArray.push("37.5%");
+        this.genderArray.push("62.5%");
+        return null; 
+      case 4:
+        this.genderArray.push("50%");
+        this.genderArray.push("50%");
+        return null; 
+      case 5:
+        this.genderArray.push("62.5%");
+        this.genderArray.push("37.5%");
+        return null; 
+      case 6:
+        this.genderArray.push("75%");
+        this.genderArray.push("25%");
+        return null; 
+      case 7:
+        this.genderArray.push("87.5%");
+        this.genderArray.push("12.5%");
+        return null; 
+      case 8:
+        this.genderArray.push("100%");
+        this.genderArray.push("0%");
+        return null; 
+      default:
+        return null;
+    }
+  }
+
+  redirectToNext(){
+    this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this._router.navigate([`list/pokemons/${this.pokemon.id + 1}`]);
+    });
+  }
+  redirectToPrevious(){
+    this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this._router.navigate([`list/pokemons/${this.pokemon.id - 1}`]);
+    });
   }
 
   redirectToMove(url: string) {
@@ -246,6 +321,26 @@ export class ConcretePokemonComponent implements OnInit {
     }
   }
 
+  redirectToItem(url: string) {
+    const regex = /\/(\d+)\/$/;
+    const match = url.match(regex);
+    if (match && match.length > 1) {
+      const itemId = match[1];
+      this._router.navigate([`items/${itemId}`]);
+      this._pokemonService.getItemById(itemId);
+    }
+  }
+
+  redirectToAbility(url: string) {
+    const regex = /\/(\d+)\/$/;
+    const match = url.match(regex);
+    if (match && match.length > 1) {
+      const abilityId = match[1];
+      this._router.navigate([`abilities/${abilityId}`]);
+      this._pokemonService.getAbilityById(abilityId);
+    }
+  }
+
   redirectToType(url: string) {
     const regex = /\/(\d+)\/$/;
     const match = url.match(regex);
@@ -254,5 +349,11 @@ export class ConcretePokemonComponent implements OnInit {
       this._router.navigate([`types/${typeId}`]);
       this._pokemonService.getTypeById(typeId);
     }
+  }
+
+  redirectToPokemon(pokemonId: number) {
+    this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this._router.navigate([`list/pokemons/${pokemonId}`]);
+    });
   }
 }

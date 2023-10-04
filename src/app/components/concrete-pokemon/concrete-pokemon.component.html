@@ -1,274 +1,279 @@
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <div class="card mx-auto my-4" style="width: 20rem;">
-                <!-- Contenido de la primera tarjeta -->
-                <div class="card-body text-center">
-                    <div *ngIf="pokemon">
-                        <h1 class="card-title text-center">{{ pokemon.name.charAt(0).toUpperCase() +
-                            pokemon.name.slice(1)}}</h1>
-                        <h5 class="card-text text-center">#{{pokemon.id}}</h5>
-                    </div>
-                    <div *ngIf="pokemon && pokemon.sprites">
-                        <div *ngIf="pokemon.sprites.front_default; then thenBlock else elseBlock"></div>
-                        <ng-template #thenBlock>
-                            <img style="width: 10rem;" class="mx-auto" [src]="pokemon.sprites.front_default" />
-                        </ng-template>
-                        <ng-template #elseBlock>
+<div *ngIf="isLoading" class="loading-animation d-flex align-items-center justify-content-center">
+    <div class="position-fixed top-50 start-50 translate-middle">
+        <app-loader></app-loader>
+    </div>
+</div>
+<div *ngIf="!isLoading">
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <div class="card mx-auto my-4" style="width: 20rem;">
+                    <!-- Contenido de la primera tarjeta -->
+                    <div class="card-body text-center">
+                        <div *ngIf="pokemon">
+                            <h1 class="card-title text-center">{{ pokemon.name.charAt(0).toUpperCase() +
+                                pokemon.name.slice(1)}}</h1>
                             <div
-                                *ngIf="pokemon.sprites['other']['official-artwork']['front_default']; then thenBlock1 else elseBlock1">
+                                style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                                <button mat-button (click)="redirectToPrevious()"><i
+                                        class="fa-solid fa-chevron-left"></i></button>
+                                <h5 class="card-text text-center">#{{pokemon.id}}</h5>
+                                <button mat-button (click)="redirectToNext()"><i
+                                        class="fa-solid fa-chevron-right"></i></button>
                             </div>
-                            <ng-template #thenBlock1>
-                                <img style="width: 10rem;" class="mx-auto"
-                                    [src]="pokemon.sprites['other']['official-artwork']['front_default']" />
+                        </div>
+                        <div *ngIf="pokemon && pokemon.sprites">
+                            <div *ngIf="pokemon.sprites.front_default; then thenBlock else elseBlock"></div>
+                            <ng-template #thenBlock>
+                                <img style="width: 10rem;" class="mx-auto" [src]="pokemon.sprites.front_default" />
                             </ng-template>
-                            <ng-template #elseBlock1>
-                                <img style="width: 10rem;" class="mx-auto" src='../../../assets/imgs/missing.png' />
-                            </ng-template>
-                        </ng-template>
-                    </div>
-                    <h3 class="card-text">Types</h3>
-                    <br>
-                    <div *ngIf="pokemon && pokemon.id">
-                        <ul class="list-unstyled text-center type-icons">
-                            <li *ngFor="let type of pokemon.types">
-                                <div class="icon" [ngClass]="type.type.name" (click)="redirectToType(type.type.url)">
-                                    <img [src]="'../../../assets/move_types/' + (type.type.name) + '.svg'" />
+                            <ng-template #elseBlock>
+                                <div
+                                    *ngIf="pokemon.sprites['other']['official-artwork']['front_default']; then thenBlock1 else elseBlock1">
                                 </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <h3 class="text-center">Shiny Sprites</h3>
-                    <div *ngIf="pokemon && pokemon.sprites">
-                        <div
-                            *ngIf="pokemon.sprites.back_shiny != null || pokemon.sprites.front_shiny != null; then thenBlock2 else elseBlock2">
+                                <ng-template #thenBlock1>
+                                    <img style="width: 10rem;" class="mx-auto"
+                                        [src]="pokemon.sprites['other']['official-artwork']['front_default']" />
+                                </ng-template>
+                                <ng-template #elseBlock1>
+                                    <img style="width: 10rem;" class="mx-auto" src='../../../assets/imgs/missing.png' />
+                                </ng-template>
+                            </ng-template>
                         </div>
-                        <ng-template #thenBlock2>
-                            <img class="mx-auto" [src]="pokemon.sprites.back_shiny" />
-                            <img class="mx-auto" [src]="pokemon.sprites.front_shiny" />
-                        </ng-template>
-                        <ng-template #elseBlock2>
+                        <div *ngIf="pokemon && pokemon.id">
+                            <ul class="list-unstyled text-center type-icons">
+                                <li *ngFor="let type of pokemon.types">
+                                    <div class="icon" [ngClass]="type.type.name"
+                                        (click)="redirectToType(type.type.url)">
+                                        <img [src]="'../../../assets/move_types/' + (type.type.name) + '.svg'" />
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <h3 class="text-center">Shiny Sprites</h3>
+                        <div *ngIf="pokemon && pokemon.sprites">
                             <div
-                                *ngIf="pokemon.sprites['other']['official-artwork']['front_shiny']; then thenBlock3 else elseBlock3">
+                                *ngIf="pokemon.sprites.back_shiny != null || pokemon.sprites.front_shiny != null; then thenBlock2 else elseBlock2">
                             </div>
-                            <ng-template #thenBlock3>
-                                <img style="width: 10rem;" class="mx-auto"
-                                    [src]="pokemon.sprites['other']['official-artwork']['front_shiny']" />
+                            <ng-template #thenBlock2>
+                                <img class="mx-auto" [src]="pokemon.sprites.back_shiny" />
+                                <img class="mx-auto" [src]="pokemon.sprites.front_shiny" />
                             </ng-template>
-                            <ng-template #elseBlock3>
-                                <p>No shiny sprite available</p>
+                            <ng-template #elseBlock2>
+                                <div
+                                    *ngIf="pokemon.sprites['other']['official-artwork']['front_shiny']; then thenBlock3 else elseBlock3">
+                                </div>
+                                <ng-template #thenBlock3>
+                                    <img style="width: 10rem;" class="mx-auto"
+                                        [src]="pokemon.sprites['other']['official-artwork']['front_shiny']" />
+                                </ng-template>
+                                <ng-template #elseBlock3>
+                                    <p>No shiny sprite available</p>
+                                </ng-template>
                             </ng-template>
-                        </ng-template>
-                    </div>
-
-                    <div class="d-flex justify-content-around">
-                        <button mat-raised-button color="primary" extended (click)="redirectminus()">
-                            Anterior
-                        </button>
-                        <button mat-raised-button color="primary" (click)="redirectplus()">
-                            Siguiente
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="row">
-                <div class="col">
-                    <div class="card mx-auto my-4" style="width: 20rem;">
-                        <!-- Contenido de la tercera tarjeta (Abilities) -->
-                        <div class="card-body text-center">
-                            <h3 class="card-text">Abilities</h3>
-                            <div *ngIf="pokemon && pokemon.abilities">
-                                <ul class="list-unstyled text-center">
-                                    <li *ngFor="let ability of pokemon.abilities">
-                                        {{ ability.ability.name.charAt(0).toUpperCase() +
-                                        ability.ability.name.slice(1)}}
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card mx-auto my-4" style="width: 20rem;">
-                <!-- Contenido de la segunda tarjeta (Stats) -->
-                <div class="card-body text-center">
-                    <h3 class="card-text">Stats</h3>
-                    <div *ngIf="pokemon && pokemon.stats">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody>
-                                    <tr *ngFor="let stat of pokemon.stats">
-                                        <td>{{ stat.stat.name.charAt(0).toUpperCase() +
-                                            stat.stat.name.slice(1)}}</td>
-                                        <td>{{ stat.base_stat }}</td>
-                                    </tr>
-                                </tbody>
+                        <div *ngIf="pokemon">
+                            <table style="border-collapse: collapse; margin: 0 auto;">
+                                <tr>
+                                    <td>Height:</td>
+                                    <td>{{pokemon.height/10}}m</td>
+                                </tr>
+                                <tr>
+                                    <td>Weight:</td>
+                                    <td>{{pokemon.weight/10}}kg</td>
+                                </tr>
                             </table>
                         </div>
+                        <br>
+                        <div *ngIf="species">
+                            {{getPokemonGenderInfo(species.gender_rate)}}
+                            <div *ngIf="genderArray.length > 0 then thenBlock22 else elseBlock22"></div>
+                            <ng-template #thenBlock22>
+                                <strong>{{genderArray[0]}}</strong> <img style="width: 1rem;"
+                                    src='../../../assets/imgs/female.png'> / <strong>{{genderArray[1]}}</strong> <img
+                                    style="width: 1rem;" src='../../../assets/imgs/male.png'>
+                            </ng-template>
+                            <ng-template #elseBlock22>
+                                <p><strong>This pokemon has no gender</strong></p>
+                            </ng-template>
+                        </div>
+                        <br>
+                        <div *ngIf="species">
+                            <h5>Egg groups</h5>
+                            <!-- Aplicamos la clase "centered-list" a la lista para centrar los elementos y los puntos de viñetas -->
+                            <ul style="text-align: center; padding-left: 0; ">
+                                <li *ngFor="let group of species.egg_groups" style="list-style-position: inside;">
+                                    {{ group.name.charAt(0).toUpperCase() +
+                                    group.name.slice(1)}}
+                                </li>
+                            </ul>
+                        </div>
+                        <br>
+                        <div *ngIf="species && pokemon">
+                            <div *ngIf="species.has_gender_differences">
+                                <!-- Gender Differences -->
+                                <h5>Gender Differences</h5>
+                                <div class="gender-differences-container">
+                                    <div class="group1">
+                                        <img style="width: 7rem" [src]="pokemon.sprites.front_default || '../../../assets/imgs/missing.png'">
+                                        <img style="width: 1rem;" src='../../../assets/imgs/male.png'>
+                                    </div>
+                                    <div class="group2">
+                                        <img style="width: 7rem" [src]="pokemon.sprites.front_female || '../../../assets/imgs/missing.png'">
+                                        <img style="width: 1rem;" src='../../../assets/imgs/female.png'>
+                                    </div>
+                                    <div class="group1">
+                                        <img style="width: 7rem" [src]="pokemon.sprites.back_default || '../../../assets/imgs/missing.png'">
+                                        <img style="width: 1rem;" src='../../../assets/imgs/male.png'>
+                                    </div>
+                                    <div class="group2">
+                                        <img style="width: 7rem" [src]="pokemon.sprites.back_female || '../../../assets/imgs/missing.png'">
+                                        <img style="width: 1rem;" src='../../../assets/imgs/female.png'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="row">
+                    <div class="card mx-auto my-4">
+                        <div class="card-body text-center" *ngIf="pokemon && species">
+                            <h3 class="card-title">{{ pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}}
+                            </h3>
+                            <p>
+                                {{ pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1) }} ({{
+                                species.genera[0].genus }} in japanese) is a Pokémon
+                                of type {{ pokemon.types[0].type.name }}{{ pokemon.types[1] ? '/' +
+                                pokemon.types[1].type.name : '' }} introduced in
+                                generation <span style="text-transform: uppercase;">{{
+                                    species.generation.name.split('-')[1]}}</span>.
+                            </p>
+                            <p>
+                                It has a {{species.shape.name}} shape.
+                            </p>
+                            <p>
+                                {{species.evolves_from_species ? "It's " + species.evolves_from_species.name + "
+                                evolution." : 'It has no prevolution.'}}
+                            </p>
+                            <p>
+                                {{species.is_baby ? 'It is a baby pokemon' : ''}}
+                            </p>
+                            <p>
+                                {{species.is_legendary ? 'It is a legendary pokemon' : ''}}
+                            </p>
+                            <p>
+                                {{species.is_mythical ? 'It is a mythical pokemon' : ''}}
+                            </p>
+                            <p>
+                                {{getEnglishDescription(species.flavor_text_entries) ?
+                                getEnglishDescription(species.flavor_text_entries) : '' }}
+                            </p>
+                            <p>
+                                It has a capture rate of {{species.capture_rate}} ({{(species.capture_rate / 255) *
+                                100}}%).
+                            </p>
+                            <p>
+                                It has a {{species.growth_rate.name}} growth rate.
+                            </p>
+                            <p>
+                                {{species.habitat ? 'Its habitat are ' + species.habitat.name + ' places.' : ''}}
+                            </p>
+                            <div *ngIf="varArray.length > 0; then thenBlock4"></div>
+                            <ng-template #thenBlock4>
+                                <h5>Other varieties</h5>
+                                <div class="card-container">
+                                    <div *ngFor="let variety of varArray; let i = index" class="card-item">
+                                        <div (click)="redirectToPokemon(varPokeArray[i].id)" class="clickable-move">
+                                            <p>{{ variety.charAt(0).toUpperCase() + variety.slice(1)}}</p>
+                                            <div
+                                                *ngIf="varPokeArray[i] && varPokeArray[i].sprites.front_default; then thenBlock9 else elseBlock9">
+                                            </div>
+                                            <ng-template #thenBlock9>
+                                                <img style="width: 7rem;"
+                                                    [src]="varPokeArray[i].sprites.front_default" />
+                                            </ng-template>
+                                            <ng-template #elseBlock9>
+                                                <div
+                                                    *ngIf="varPokeArray[i] && varPokeArray[i].sprites['other']['official-artwork']['front_default']; then thenBlock10 else elseBlock10">
+                                                </div>
+                                                <ng-template #thenBlock10>
+                                                    <img style="width: 7rem;"
+                                                        [src]="varPokeArray[i].sprites['other']['official-artwork']['front_default']" />
+                                                </ng-template>
+                                                <ng-template #elseBlock10>
+                                                    <img style="width: 7rem;" src='../../../assets/imgs/missing.png' />
+                                                </ng-template>
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card mx-auto my-4" style="width: 20rem;">
+                            <div class="card-body text-center">
+                                <h3 class="card-title">Abilities</h3>
+                                <div *ngIf="pokemon && pokemon.abilities">
+                                    <ul class="list-unstyled text-center" *ngFor="let ability of pokemon.abilities">
+                                        <li class="clickable-ability" (click)="redirectToAbility(ability.ability.url)">
+                                            {{ ability.ability.name.charAt(0).toUpperCase() +
+                                            ability.ability.name.slice(1)}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card mx-auto my-4" style="width: 20rem;">
+                            <!-- Contenido de la segunda tarjeta (Stats) -->
+                            <div class="card-body text-center">
+                                <h3 class="card-title">Stats</h3>
+                                <div *ngIf="pokemon && pokemon.stats">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr *ngFor="let stat of pokemon.stats">
+                                                    <td>{{ stat.stat.name.charAt(0).toUpperCase() +
+                                                        stat.stat.name.slice(1)}}</td>
+                                                    <td>{{ stat.base_stat }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row" *ngIf="chain">
-        <div class="card mx-auto my-4"
-            *ngIf="chain.chain.evolves_to.length > 0 || species.evolves_from_species != null">
-            <h1 class="mt-4 card-title text-center"> {{ pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}}
-                evolution chain</h1>
-            <div *ngFor="let evol of chain.chain.evolves_to; let i = index">
-                <div *ngIf="evol.evolves_to.length > 0; then thenBlock2 else elseBlock2"></div>
-                <ng-template #elseBlock2>
-                    <!-- Si hay 2 evoluciones -->
-                    <div class="row justify-content-around">
-                        <div class="col">
-                            <!-- Contenido de la primera tarjeta -->
-                            <!-- Puedes usar el mismo estilo "card mx-auto my-4" o personalizarlo según tus necesidades -->
-                            <div class="card mx-auto my-4" style="width: 20rem;">
-                                <div class="card-body text-center"
-                                    *ngIf="pokemonArray[findPokemonInArray(chain.chain.species.name)]">
-                                    <h5 class="card-text">{{chain.chain.species.name.charAt(0).toUpperCase() +
-                                        chain.chain.species.name.slice(1)}}</h5>
-                                    <img
-                                        [src]="pokemonArray[findPokemonInArray(chain.chain.species.name)].sprites.front_default">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col align-self-center">
-                            <!-- Flecha hacia la izquierda -->
-                            <div class="text-center">
-                                <i class="fa-solid fa-right-long"></i>
-                            </div>
-                            <div class="text-center">
-                                <p>
-                                    {{evol.evolution_details[0].trigger.name.charAt(0).toUpperCase() +
-                                    evol.evolution_details[0].trigger.name.slice(1)}}
-                                </p>
-                            </div>
-                            <div class="text-center">
-                                <div
-                                    *ngIf="evol.evolution_details[0].gender !== null && evol.evolution_details[0].gender !== false">
-                                    <ng-container *ngIf="evol.evolution_details[0].gender == 1">
-                                        <img src="../../../assets/imgs/female.png" style="max-width: 1rem;">
-                                    </ng-container>
-                                    <ng-container *ngIf="evol.evolution_details[0].gender == 2">
-                                        <img src="../../../assets/imgs/male.png" style="max-width: 1rem;">
-                                    </ng-container>
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].held_item !== null && evol.evolution_details[0].held_item !== false && itemArray[findImageByName(evol.evolution_details[0].held_item.name)].sprites">
-                                    Held: <img
-                                        [src]="itemArray[findImageByName(evol.evolution_details[0].held_item.name)].sprites.default">
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].item !== null && evol.evolution_details[0].item !== false && itemArray[findImageByName(evol.evolution_details[0].item.name)].sprites">
-                                    <img
-                                        [src]="itemArray[findImageByName(evol.evolution_details[0].item.name)].sprites.default">
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].known_move !== null && evol.evolution_details[0].known_move !== false">
-                                    Known Move: {{ evol.evolution_details[0].known_move.name }}
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].known_move_type !== null && evol.evolution_details[0].known_move_type !== false">
-                                    Known Move Type: {{ evol.evolution_details[0].known_move_type.name }}
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].location !== null && evol.evolution_details[0].location !== false">
-                                    Location: {{ evol.evolution_details[0].location.name }}
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].min_affection !== null && evol.evolution_details[0].min_affection !== false">
-                                    Affection: {{ evol.evolution_details[0].min_affection }}
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].min_beauty !== null && evol.evolution_details[0].min_beauty !== false">
-                                    Beauty: {{ evol.evolution_details[0].min_beauty }}
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].min_happiness !== null && evol.evolution_details[0].min_happiness !== false">
-                                    Happiness: {{ evol.evolution_details[0].min_happiness }}
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].min_level !== null && evol.evolution_details[0].min_level !== false">
-                                    Level: {{ evol.evolution_details[0].min_level }}
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].needs_overworld_rain !== null && evol.evolution_details[0].needs_overworld_rain !== false">
-                                    Needs Overworld Rain: {{ evol.evolution_details[0].needs_overworld_rain }}
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].party_species !== null && evol.evolution_details[0].party_species !== false">
-                                    Party Species: {{ evol.evolution_details[0].party_species }}
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].party_type !== null && evol.evolution_details[0].party_type !== false">
-                                    Party Type: {{ evol.evolution_details[0].party_type }}
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].relative_physical_stats !== null && evol.evolution_details[0].relative_physical_stats !== false">
-                                    Relative Physical Stats: {{ evol.evolution_details[0].relative_physical_stats }}
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].time_of_day !== null && evol.evolution_details[0].time_of_day !== false && evol.evolution_details[0].time_of_day !==''">
-                                    Time of Day: {{ evol.evolution_details[0].time_of_day }}
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].trade_species !== null && evol.evolution_details[0].trade_species !== false">
-                                    Trade Species: {{ evol.evolution_details[0].trade_species }}
-                                </div>
-
-                                <div
-                                    *ngIf="evol.evolution_details[0].turn_upside_down !== null && evol.evolution_details[0].turn_upside_down !== false">
-                                    Turn Upside Down: {{ evol.evolution_details[0].turn_upside_down }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <!-- Contenido de la segunda tarjeta -->
-                            <!-- Puedes usar el mismo estilo "card mx-auto my-4" o personalizarlo según tus necesidades -->
-                            <div class="card mx-auto my-4" style="width: 20rem;">
-                                <div class="card-body text-center"
-                                    *ngIf="pokemonArray[findPokemonInArray(evol.species.name)]">
-                                    <h5 class="card-text">{{evol.species.name.charAt(0).toUpperCase() +
-                                        evol.species.name.slice(1)}}</h5>
-                                    <img
-                                        [src]="pokemonArray[findPokemonInArray(evol.species.name)].sprites.front_default">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </ng-template>
-
-                <ng-template #thenBlock2>
-                    <!-- Si no hay 3 evoluciones -->
-                    <div *ngFor="let evolve of chain.chain.evolves_to[i].evolves_to; let ind = index">
+        <div class="row" *ngIf="chain">
+            <div class="card mx-auto my-4"
+                *ngIf="chain.chain.evolves_to.length > 0 || species.evolves_from_species != null">
+                <h1 class="mt-4 card-title text-center"> {{ pokemon.name.charAt(0).toUpperCase() +
+                    pokemon.name.slice(1)}}
+                    evolution chain</h1>
+                <div *ngFor="let evol of chain.chain.evolves_to; let i = index">
+                    <div *ngIf="evol.evolves_to.length > 0; then thenBlock2 else elseBlock2"></div>
+                    <ng-template #elseBlock2>
+                        <!-- Si hay 2 evoluciones -->
                         <div class="row justify-content-around">
                             <div class="col">
                                 <!-- Contenido de la primera tarjeta -->
                                 <!-- Puedes usar el mismo estilo "card mx-auto my-4" o personalizarlo según tus necesidades -->
-                                <div class="card mx-auto my-4" style="width: 20rem;">
-                                    <div class="card-body text-center"
-                                        *ngIf="pokemonArray[findPokemonInArray(chain.chain.species.name)]">
-                                        <h5 class="card-text">{{chain.chain.species.name.charAt(0).toUpperCase() +
+                                <div class="mx-auto my-4 clickable" style="width: 20rem;">
+                                    <div class="text-center"
+                                        *ngIf="pokemonArray[findPokemonInArray(chain.chain.species.name)]"
+                                        (click)="redirectToPokemon(pokemonArray[findPokemonInArray(chain.chain.species.name)].id)">
+                                        <h5>{{chain.chain.species.name.charAt(0).toUpperCase() +
                                             chain.chain.species.name.slice(1)}}</h5>
                                         <img
                                             [src]="pokemonArray[findPokemonInArray(chain.chain.species.name)].sprites.front_default">
@@ -281,14 +286,15 @@
                                     <i class="fa-solid fa-right-long"></i>
                                 </div>
                                 <div class="text-center">
-                                    <div
-                                        *ngIf="evol.evolution_details[0].trigger !== null && evol.evolution_details[0].trigger !== false">
-                                        {{ evol.evolution_details[0].trigger.name }}
-                                    </div>
-
+                                    <p>
+                                        {{evol.evolution_details[0].trigger.name.charAt(0).toUpperCase() +
+                                        evol.evolution_details[0].trigger.name.slice(1)}}
+                                    </p>
+                                </div>
+                                <div class="text-center" *ngIf="itemArray">
                                     <div
                                         *ngIf="evol.evolution_details[0].gender !== null && evol.evolution_details[0].gender !== false">
-                                        <ng-container *ngIf="evolve.evolution_details[0].gender == 1">
+                                        <ng-container *ngIf="evol.evolution_details[0].gender == 1">
                                             <img src="../../../assets/imgs/female.png" style="max-width: 1rem;">
                                         </ng-container>
                                         <ng-container *ngIf="evol.evolution_details[0].gender == 2">
@@ -297,30 +303,32 @@
                                     </div>
 
                                     <div
-                                        *ngIf="evol.evolution_details[0].held_item !== null && evol.evolution_details[0].held_item !== false">
-                                        Held: <img
-                                            [src]="itemArray[findImageByName(evol.evolution_details[0].held_item.name)].sprites.default">
+                                        *ngIf="evol.evolution_details[0].held_item !== null && evol.evolution_details[0].held_item !== false && itemArray[findImageByName(evol.evolution_details[0].held_item.name)].sprites">
+                                        Held: <img class="clickable"
+                                            [src]="itemArray[findImageByName(evol.evolution_details[0].held_item.name)].sprites.default"
+                                            (click)="redirectToItem(evol.evolution_details[0].item.url)">
                                     </div>
 
                                     <div
-                                        *ngIf="evol.evolution_details[0].item !== null && evol.evolution_details[0].item !== false">
-                                        <img
-                                            [src]="itemArray[findImageByName(evol.evolution_details[0].item.name)].sprites.default">
+                                        *ngIf="evol.evolution_details[0].item !== null && evol.evolution_details[0].item !== false && itemArray[findImageByName(evol.evolution_details[0].item.name)].sprites">
+                                        <img class="clickable"
+                                            [src]="itemArray[findImageByName(evol.evolution_details[0].item.name)].sprites.default"
+                                            (click)="redirectToItem(evol.evolution_details[0].item.url)">
                                     </div>
 
                                     <div
                                         *ngIf="evol.evolution_details[0].known_move !== null && evol.evolution_details[0].known_move !== false">
-                                        Known Move: {{ evol.evolution_details[0].known_move }}
+                                        Known Move: {{ evol.evolution_details[0].known_move.name }}
                                     </div>
 
                                     <div
                                         *ngIf="evol.evolution_details[0].known_move_type !== null && evol.evolution_details[0].known_move_type !== false">
-                                        Known Move Type: {{ evol.evolution_details[0].known_move_type }}
+                                        Known Move Type: {{ evol.evolution_details[0].known_move_type.name }}
                                     </div>
 
                                     <div
                                         *ngIf="evol.evolution_details[0].location !== null && evol.evolution_details[0].location !== false">
-                                        Location: {{ evol.evolution_details[0].location }}
+                                        Location: {{ evol.evolution_details[0].location.name }}
                                     </div>
 
                                     <div
@@ -364,7 +372,7 @@
                                     </div>
 
                                     <div
-                                        *ngIf="evol.evolution_details[0].time_of_day !== null && evol.evolution_details[0].time_of_day !== false && evol.evolution_details[0].time_of_day !== ''">
+                                        *ngIf="evol.evolution_details[0].time_of_day !== null && evol.evolution_details[0].time_of_day !== false && evol.evolution_details[0].time_of_day !==''">
                                         Time of Day: {{ evol.evolution_details[0].time_of_day }}
                                     </div>
 
@@ -382,81 +390,106 @@
                             <div class="col">
                                 <!-- Contenido de la segunda tarjeta -->
                                 <!-- Puedes usar el mismo estilo "card mx-auto my-4" o personalizarlo según tus necesidades -->
-                                <div class="card mx-auto my-4" style="width: 20rem;">
-                                    <div class="card-body text-center"
-                                        *ngIf="pokemonArray[findPokemonInArray(evol.species.name)]">
-                                        <h5 class="card-text">{{evol.species.name.charAt(0).toUpperCase() +
+                                <div class="mx-auto my-4 clickable" style="width: 20rem;">
+                                    <div class="text-center" *ngIf="pokemonArray[findPokemonInArray(evol.species.name)]"
+                                        (click)="redirectToPokemon(pokemonArray[findPokemonInArray(evol.species.name)].id)">
+                                        <h5>{{evol.species.name.charAt(0).toUpperCase() +
                                             evol.species.name.slice(1)}}</h5>
                                         <img
                                             [src]="pokemonArray[findPokemonInArray(evol.species.name)].sprites.front_default">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col align-self-center">
-                                <!-- Flecha hacia la izquierda -->
-                                <div class="text-center">
-                                    <i class="fa-solid fa-right-long"></i>
+                        </div>
+                    </ng-template>
+
+                    <ng-template #thenBlock2>
+                        <!-- Si no hay 3 evoluciones -->
+                        <div *ngFor="let evolve of chain.chain.evolves_to[i].evolves_to; let ind = index">
+                            <div class="row justify-content-around">
+                                <div class="col">
+                                    <!-- Contenido de la primera tarjeta -->
+                                    <!-- Puedes usar el mismo estilo "card mx-auto my-4" o personalizarlo según tus necesidades -->
+                                    <div class="mx-auto my-4 clickable" style="width: 20rem;">
+                                        <div class="text-center"
+                                            *ngIf="pokemonArray[findPokemonInArray(chain.chain.species.name)]"
+                                            (click)="redirectToPokemon(pokemonArray[findPokemonInArray(chain.chain.species.name)].id)">
+                                            <h5>{{chain.chain.species.name.charAt(0).toUpperCase() +
+                                                chain.chain.species.name.slice(1)}}</h5>
+                                            <img
+                                                [src]="pokemonArray[findPokemonInArray(chain.chain.species.name)].sprites.front_default">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col align-self-center">
+                                    <!-- Flecha hacia la izquierda -->
+                                    <div class="text-center">
+                                        <i class="fa-solid fa-right-long"></i>
+                                    </div>
                                     <div class="text-center">
                                         <div
-                                            *ngIf="evolve.evolution_details[0].trigger !== null && evolve.evolution_details[0].trigger !== false">
-                                            {{ evolve.evolution_details[0].trigger.name }}
+                                            *ngIf="evol.evolution_details[0].trigger !== null && evol.evolution_details[0].trigger !== false">
+                                            {{evol.evolution_details[0].trigger.name.charAt(0).toUpperCase() +
+                                            evol.evolution_details[0].trigger.name.slice(1)}}
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].gender !== null && evolve.evolution_details[0].gender !== false">
+                                            *ngIf="evol.evolution_details[0].gender !== null && evol.evolution_details[0].gender !== false">
                                             <ng-container *ngIf="evolve.evolution_details[0].gender == 1">
                                                 <img src="../../../assets/imgs/female.png" style="max-width: 1rem;">
                                             </ng-container>
-                                            <ng-container *ngIf="evolve.evolution_details[0].gender == 2">
+                                            <ng-container *ngIf="evol.evolution_details[0].gender == 2">
                                                 <img src="../../../assets/imgs/male.png" style="max-width: 1rem;">
                                             </ng-container>
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].held_item !== null && evolve.evolution_details[0].held_item !== false && itemArray[findImageByName(evolve.evolution_details[0].held_item.name)]">
-                                            Held: <img
-                                                [src]="itemArray[findImageByName(evolve.evolution_details[0].held_item.name)].sprites.default">
+                                            *ngIf="evol.evolution_details[0].held_item !== null && evol.evolution_details[0].held_item !== false">
+                                            Held: <img class="clickable"
+                                                [src]="itemArray[findImageByName(evol.evolution_details[0].held_item.name)].sprites.default"
+                                                (click)="redirectToItem(evol.evolution_details[0].item.url)">
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].item !== null && evolve.evolution_details[0].item !== false && itemArray[findImageByName(evolve.evolution_details[0].item.name)]">
-                                            <img
-                                                [src]="itemArray[findImageByName(evolve.evolution_details[0].item.name)].sprites.default">
+                                            *ngIf="evol.evolution_details[0].item !== null && evol.evolution_details[0].item !== false">
+                                            <img class="clickable"
+                                                [src]="itemArray[findImageByName(evol.evolution_details[0].item.name)].sprites.default"
+                                                (click)="redirectToItem(evol.evolution_details[0].item.url)">
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].known_move !== null && evolve.evolution_details[0].known_move !== false">
-                                            Known Move: {{ evolve.evolution_details[0].known_move }}
+                                            *ngIf="evol.evolution_details[0].known_move !== null && evol.evolution_details[0].known_move !== false">
+                                            Known Move: {{ evol.evolution_details[0].known_move }}
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].known_move_type !== null && evolve.evolution_details[0].known_move_type !== false">
-                                            Known Move Type: {{ evolve.evolution_details[0].known_move_type }}
+                                            *ngIf="evol.evolution_details[0].known_move_type !== null && evol.evolution_details[0].known_move_type !== false">
+                                            Known Move Type: {{ evol.evolution_details[0].known_move_type }}
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].location !== null && evolve.evolution_details[0].location !== false">
-                                            Location: {{ evolve.evolution_details[0].location }}
+                                            *ngIf="evol.evolution_details[0].location !== null && evol.evolution_details[0].location !== false">
+                                            Location: {{ evol.evolution_details[0].location }}
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].min_affection !== null && evolve.evolution_details[0].min_affection !== false">
-                                            Affection: {{ evolve.evolution_details[0].min_affection }}
+                                            *ngIf="evol.evolution_details[0].min_affection !== null && evol.evolution_details[0].min_affection !== false">
+                                            Affection: {{ evol.evolution_details[0].min_affection }}
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].min_beauty !== null && evolve.evolution_details[0].min_beauty !== false">
-                                            Beauty: {{ evolve.evolution_details[0].min_beauty }}
+                                            *ngIf="evol.evolution_details[0].min_beauty !== null && evol.evolution_details[0].min_beauty !== false">
+                                            Beauty: {{ evol.evolution_details[0].min_beauty }}
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].min_happiness !== null && evolve.evolution_details[0].min_happiness !== false">
-                                            Happiness: {{ evolve.evolution_details[0].min_happiness }}
+                                            *ngIf="evol.evolution_details[0].min_happiness !== null && evol.evolution_details[0].min_happiness !== false">
+                                            Happiness: {{ evol.evolution_details[0].min_happiness }}
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].min_level !== null && evolve.evolution_details[0].min_level !== false">
-                                            Level: {{ evolve.evolution_details[0].min_level }}
+                                            *ngIf="evol.evolution_details[0].min_level !== null && evol.evolution_details[0].min_level !== false">
+                                            Level: {{ evol.evolution_details[0].min_level }}
                                         </div>
 
                                         <div
@@ -465,78 +498,192 @@
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].party_species !== null && evolve.evolution_details[0].party_species !== false">
-                                            Party Species: {{ evolve.evolution_details[0].party_species }}
+                                            *ngIf="evol.evolution_details[0].party_species !== null && evol.evolution_details[0].party_species !== false">
+                                            Party Species: {{ evol.evolution_details[0].party_species }}
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].party_type !== null && evolve.evolution_details[0].party_type !== false">
-                                            Party Type: {{ evolve.evolution_details[0].party_type }}
+                                            *ngIf="evol.evolution_details[0].party_type !== null && evol.evolution_details[0].party_type !== false">
+                                            Party Type: {{ evol.evolution_details[0].party_type }}
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].relative_physical_stats !== null && evolve.evolution_details[0].relative_physical_stats !== false">
+                                            *ngIf="evol.evolution_details[0].relative_physical_stats !== null && evol.evolution_details[0].relative_physical_stats !== false">
                                             Relative Physical Stats: {{
-                                            evolve.evolution_details[0].relative_physical_stats }}
+                                            evol.evolution_details[0].relative_physical_stats }}
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].time_of_day !== null && evolve.evolution_details[0].time_of_day !== false && evolve.evolution_details[0].time_of_day !== ''">
-                                            Time of Day: {{ evolve.evolution_details[0].time_of_day }}
+                                            *ngIf="evol.evolution_details[0].time_of_day !== null && evol.evolution_details[0].time_of_day !== false && evol.evolution_details[0].time_of_day !== ''">
+                                            Time of Day: {{ evol.evolution_details[0].time_of_day }}
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].trade_species !== null && evolve.evolution_details[0].trade_species !== false">
-                                            Trade Species: {{ evolve.evolution_details[0].trade_species }}
+                                            *ngIf="evol.evolution_details[0].trade_species !== null && evol.evolution_details[0].trade_species !== false">
+                                            Trade Species: {{ evol.evolution_details[0].trade_species }}
                                         </div>
 
                                         <div
-                                            *ngIf="evolve.evolution_details[0].turn_upside_down !== null && evolve.evolution_details[0].turn_upside_down !== false">
-                                            Turn Upside Down: {{ evolve.evolution_details[0].turn_upside_down }}
+                                            *ngIf="evol.evolution_details[0].turn_upside_down !== null && evol.evolution_details[0].turn_upside_down !== false">
+                                            Turn Upside Down: {{ evol.evolution_details[0].turn_upside_down }}
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <!-- Contenido de la tercera tarjeta -->
-                                <!-- Puedes usar el mismo estilo "card mx-auto my-4" o personalizarlo según tus necesidades -->
-                                <div class="card mx-auto my-4" style="width: 20rem;">
-                                    <div class="card-body text-center"
-                                        *ngIf="pokemonArray[findPokemonInArray(evolve.species.name)]">
-                                        <h5 class="card-text">{{evolve.species.name.charAt(0).toUpperCase() +
-                                            evolve.species.name.slice(1)}}</h5>
-                                        <img
-                                            [src]="pokemonArray[findPokemonInArray(evolve.species.name)].sprites.front_default">
+                                <div class="col">
+                                    <!-- Contenido de la segunda tarjeta -->
+                                    <!-- Puedes usar el mismo estilo "card mx-auto my-4" o personalizarlo según tus necesidades -->
+                                    <div class="mx-auto my-4 clickable" style="width: 20rem;">
+                                        <div class="text-center"
+                                            *ngIf="pokemonArray[findPokemonInArray(evol.species.name)]"
+                                            (click)="redirectToPokemon(pokemonArray[findPokemonInArray(evol.species.name)].id)">
+                                            <h5>{{evol.species.name.charAt(0).toUpperCase() +
+                                                evol.species.name.slice(1)}}</h5>
+                                            <img
+                                                [src]="pokemonArray[findPokemonInArray(evol.species.name)].sprites.front_default">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col align-self-center">
+                                    <!-- Flecha hacia la izquierda -->
+                                    <div class="text-center">
+                                        <i class="fa-solid fa-right-long"></i>
+                                        <div class="text-center">
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].trigger !== null && evolve.evolution_details[0].trigger !== false">
+                                                {{evolve.evolution_details[0].trigger.name.charAt(0).toUpperCase() +
+                                                evolve.evolution_details[0].trigger.name.slice(1)}}
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].gender !== null && evolve.evolution_details[0].gender !== false">
+                                                <ng-container *ngIf="evolve.evolution_details[0].gender == 1">
+                                                    <img src="../../../assets/imgs/female.png" style="max-width: 1rem;">
+                                                </ng-container>
+                                                <ng-container *ngIf="evolve.evolution_details[0].gender == 2">
+                                                    <img src="../../../assets/imgs/male.png" style="max-width: 1rem;">
+                                                </ng-container>
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].held_item !== null && evolve.evolution_details[0].held_item !== false && itemArray[findImageByName(evolve.evolution_details[0].held_item.name)]">
+                                                Held: <img class="clickable"
+                                                    (click)="redirectToItem(evolve.evolution_details[0].held_item.url)"
+                                                    [src]="itemArray[findImageByName(evolve.evolution_details[0].held_item.name)].sprites.default">
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].item !== null && evolve.evolution_details[0].item !== false && itemArray[findImageByName(evolve.evolution_details[0].item.name)]">
+                                                <img class="clickable"
+                                                    [src]="itemArray[findImageByName(evolve.evolution_details[0].item.name)].sprites.default"
+                                                    (click)="redirectToItem(evolve.evolution_details[0].item.url)">
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].known_move !== null && evolve.evolution_details[0].known_move !== false">
+                                                Known Move: {{ evolve.evolution_details[0].known_move }}
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].known_move_type !== null && evolve.evolution_details[0].known_move_type !== false">
+                                                Known Move Type: {{ evolve.evolution_details[0].known_move_type }}
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].location !== null && evolve.evolution_details[0].location !== false">
+                                                Location: {{ evolve.evolution_details[0].location.name }}
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].min_affection !== null && evolve.evolution_details[0].min_affection !== false">
+                                                Affection: {{ evolve.evolution_details[0].min_affection }}
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].min_beauty !== null && evolve.evolution_details[0].min_beauty !== false">
+                                                Beauty: {{ evolve.evolution_details[0].min_beauty }}
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].min_happiness !== null && evolve.evolution_details[0].min_happiness !== false">
+                                                Happiness: {{ evolve.evolution_details[0].min_happiness }}
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].min_level !== null && evolve.evolution_details[0].min_level !== false">
+                                                Level: {{ evolve.evolution_details[0].min_level }}
+                                            </div>
+
+                                            <div
+                                                *ngIf="evol.evolution_details[0].needs_overworld_rain !== null && evol.evolution_details[0].needs_overworld_rain !== false">
+                                                Needs Overworld Rain: {{ evol.evolution_details[0].needs_overworld_rain
+                                                }}
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].party_species !== null && evolve.evolution_details[0].party_species !== false">
+                                                Party Species: {{ evolve.evolution_details[0].party_species }}
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].party_type !== null && evolve.evolution_details[0].party_type !== false">
+                                                Party Type: {{ evolve.evolution_details[0].party_type }}
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].relative_physical_stats !== null && evolve.evolution_details[0].relative_physical_stats !== false">
+                                                Relative Physical Stats: {{
+                                                evolve.evolution_details[0].relative_physical_stats }}
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].time_of_day !== null && evolve.evolution_details[0].time_of_day !== false && evolve.evolution_details[0].time_of_day !== ''">
+                                                Time of Day: {{ evolve.evolution_details[0].time_of_day }}
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].trade_species !== null && evolve.evolution_details[0].trade_species !== false">
+                                                Trade Species: {{ evolve.evolution_details[0].trade_species }}
+                                            </div>
+
+                                            <div
+                                                *ngIf="evolve.evolution_details[0].turn_upside_down !== null && evolve.evolution_details[0].turn_upside_down !== false">
+                                                Turn Upside Down: {{ evolve.evolution_details[0].turn_upside_down }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <!-- Contenido de la tercera tarjeta -->
+                                    <!-- Puedes usar el mismo estilo "card mx-auto my-4" o personalizarlo según tus necesidades -->
+                                    <div class="mx-auto my-4 clickable" style="width: 20rem;">
+                                        <div class="text-center"
+                                            *ngIf="pokemonArray[findPokemonInArray(evolve.species.name)]"
+                                            (click)="redirectToPokemon(pokemonArray[findPokemonInArray(evolve.species.name)].id)">
+                                            <h5>{{evolve.species.name.charAt(0).toUpperCase() +
+                                                evolve.species.name.slice(1)}}</h5>
+                                            <img
+                                                [src]="pokemonArray[findPokemonInArray(evolve.species.name)].sprites.front_default">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </ng-template>
-
+                    </ng-template>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<hr>
-<div class="container">
-    <div *ngIf="pokemon && pokemon.name">
-        <h1 class="text-center">
-            {{ pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}} can learn this moves
-        </h1>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div *ngIf="isLoading"
-                class="col-12 loading-animation d-flex align-items-center justify-content-center text-center">
-                <div class="position-fixed top-50 start-50 translate-middle">
-                    <mat-spinner></mat-spinner>
-                </div>
-            </div>
-
-            <div *ngIf="!isLoading">
+    <hr>
+    <div class="container" *ngIf="pokemon && pokemon.name && pokemon.moves.length > 0">
+        <div>
+            <h1 class="text-center">
+                {{ pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}} can learn this moves
+            </h1>
+        </div>
+        <div class="row">
+            <div class="col">
                 <div class="table-responsive">
-                    <table class="table table-vertical">
+                    <table class="table table-vertical table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th class="text-center">#</th>
@@ -552,27 +699,28 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let move of pokemon.moves; let i = index">
-                                <td class="text-center" *ngIf="moveArray[i]">
+                                <td class="text-center" *ngIf="moveArray[i]" [ngClass]="['t-'+ moveArray[i].type.name]">
                                     {{ moveArray[i].id}}
                                 </td>
-                                <td class="text-center" (click)="redirectToMove(move.move.url)" *ngIf="moveArray[i]">
+                                <td class="text-center" (click)="redirectToMove(move.move.url)" *ngIf="moveArray[i]"
+                                    [ngClass]="['t-'+ moveArray[i].type.name]">
                                     <a class="clickable-move">{{ moveArray[i].name.charAt(0).toUpperCase() +
                                         moveArray[i].name.slice(1) }}</a>
                                 </td>
-                                <td class="text-center" *ngIf="moveArray[i]">
+                                <td class="text-center" *ngIf="moveArray[i]" [ngClass]="['t-'+ moveArray[i].type.name]">
                                     <div class="icon" [ngClass]="moveArray[i].type.name"
                                         (click)="redirectToType(moveArray[i].type.url)">
                                         <img [src]="'../../../assets/move_types/' + (moveArray[i].type.name) + '.svg'"
                                             [alt]="moveArray[i].type.name" />
                                     </div>
                                 </td>
-                                <td class="text-center" *ngIf="moveArray[i]">
+                                <td class="text-center" *ngIf="moveArray[i]" [ngClass]="['t-'+ moveArray[i].type.name]">
                                     <div>
                                         <img [src]="'../../../assets/move_categories/' + (moveArray[i].damage_class.name) + '.png'"
                                             [alt]="moveArray[i].damage_class.name" />
                                     </div>
                                 </td>
-                                <td class="text-center" *ngIf="moveArray[i]">
+                                <td class="text-center" *ngIf="moveArray[i]" [ngClass]="['t-'+ moveArray[i].type.name]">
                                     <div *ngIf="moveArray[i].power; then thenBlock else elseBlock"></div>
                                     <ng-template #thenBlock>
                                         {{ moveArray[i].power }}
@@ -581,7 +729,7 @@
                                         <p>-</p>
                                     </ng-template>
                                 </td>
-                                <td class="text-center" *ngIf="moveArray[i]">
+                                <td class="text-center" *ngIf="moveArray[i]" [ngClass]="['t-'+ moveArray[i].type.name]">
                                     <div *ngIf="moveArray[i].accuracy; then thenBlock1 else elseBlock1"></div>
                                     <ng-template #thenBlock1>
                                         {{ moveArray[i].accuracy }}
@@ -590,13 +738,13 @@
                                         <p>-</p>
                                     </ng-template>
                                 </td>
-                                <td class="text-center" *ngIf="moveArray[i]">
+                                <td class="text-center" *ngIf="moveArray[i]" [ngClass]="['t-'+ moveArray[i].type.name]">
                                     {{ moveArray[i].pp }}
                                 </td>
-                                <td class="text-center" *ngIf="moveArray[i]">
+                                <td class="text-center" *ngIf="moveArray[i]" [ngClass]="['t-'+ moveArray[i].type.name]">
                                     {{ move.version_group_details[0].level_learned_at }}
                                 </td>
-                                <td class="text-center" *ngIf="moveArray[i]">
+                                <td class="text-center" *ngIf="moveArray[i]" [ngClass]="['t-'+ moveArray[i].type.name]">
                                     {{ move.version_group_details[0].move_learn_method.name.charAt(0).toUpperCase() +
                                     move.version_group_details[0].move_learn_method.name.slice(1) }}
                                 </td>

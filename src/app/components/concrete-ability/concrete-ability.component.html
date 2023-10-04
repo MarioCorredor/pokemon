@@ -1,1 +1,99 @@
-<p>concrete-ability works!</p>
+<div *ngIf="isLoading" class="loading-animation d-flex align-items-center justify-content-center">
+    <div class="position-fixed top-50 start-50 translate-middle">
+        <app-loader></app-loader>
+    </div>
+</div>
+<div *ngIf="!isLoading">
+    <div class="container">
+
+        <div class="card mx-auto my-4">
+            <div class="row">
+                <div *ngIf="ability">
+                    <h1 class="col card-title text-center mt-4">
+                        {{ ability.name.charAt(0).toUpperCase() + ability.name.slice(1) }}
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card-body text-center" *ngIf="ability">
+                        <p>{{ability.effect_entries.length>0 ? ability.effect_entries[1].effect : 'Effect description not
+                            available'}}</p>
+                        <p>{{getEnglishDescription(ability.flavor_text_entries) ?
+                            getEnglishDescription(ability.flavor_text_entries) : ''}}</p>
+                        <p>This ability was introduced in generation <span style="text-transform: uppercase;">{{
+                                ability.generation.name.split('-')[1]}}</span>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="my-4" style="width: 100%;">
+                    <div *ngIf="ability">
+                        <h1 class="text-center" style="font-size: 1.5rem;">
+                            Pokemons that can have {{ ability.name.charAt(0).toUpperCase() + ability.name.slice(1) }}
+                            ability
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="row">
+                        <div *ngIf="ability">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-3" *ngFor="let pokemon of ability.pokemon; let i = index">
+                                        <div *ngIf="pokemonArray[i]" class="card card-h mx-auto my-4"
+                                            style="width: 100%;" (click)="redirectToPokemon(pokemon.pokemon.url)"
+                                            [ngClass]="['color-' + pokemonArray[i].types[0].type.name, pokemonArray[i].types[1] ? 'border-' + pokemonArray[i].types[1].type.name : 'brd-dft']">
+                                            <!-- Contenido de la tarjeta -->
+                                            <div class="card-body text-center">
+                                                <div *ngIf="pokemon && pokemonArray[i]">
+                                                    <h1 class="card-title text-center" style="font-size: 1.5rem;">{{
+                                                        pokemon.pokemon.name.charAt(0).toUpperCase() +
+                                                        pokemon.pokemon.name.slice(1) }}</h1>
+                                                    <div
+                                                        *ngIf="pokemonArray[i].sprites.front_default; then thenBlock else elseBlock">
+                                                    </div>
+                                                    <ng-template #thenBlock>
+                                                        <img style="width: 10rem;" class="mx-auto"
+                                                            [src]="pokemonArray[i].sprites.front_default" />
+                                                    </ng-template>
+                                                    <ng-template #elseBlock>
+                                                        <div
+                                                            *ngIf="pokemonArray[i].sprites['other']['official-artwork']['front_default']; then thenBlock1 else elseBlock1">
+                                                        </div>
+                                                        <ng-template #thenBlock1>
+                                                            <img style="width: 10rem;" class="mx-auto"
+                                                                [src]="pokemonArray[i].sprites['other']['official-artwork']['front_default']" />
+                                                        </ng-template>
+                                                        <ng-template #elseBlock1>
+                                                            <img style="width: 10rem;" class="mx-auto"
+                                                                src='../../../assets/imgs/missing.png' />
+                                                        </ng-template>
+                                                    </ng-template>
+                                                    <ul class="list-unstyled text-center type-icons">
+                                                        <li *ngFor="let type of pokemonArray[i].types">
+                                                            <div class="icon" [ngClass]="['i-'+type.type.name]">
+                                                                <img
+                                                                    [src]="'../../../assets/move_types/' + (type.type.name) + '.svg'" />
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

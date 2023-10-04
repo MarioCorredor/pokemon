@@ -75,6 +75,7 @@ export class ConcreteMoveComponent {
       this._pokemonService.getPokemonById(pokemonId);
     }
   }
+  
   redirectToType(url: string){
     const regex = /\/(\d+)\/$/;
     const match = url.match(regex);

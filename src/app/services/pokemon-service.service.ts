@@ -12,6 +12,9 @@ import { Species } from '../models/species';
 import { Chain } from '../models/chain';
 import { AItem } from '../models/auxItem';
 import { Item } from '../models/item';
+import { AAbility } from '../models/auxAbility';
+import { Ability } from '../models/ability';
+import { AChain } from '../models/auxChain';
 
 @Injectable({
   providedIn: 'root'
@@ -72,16 +75,6 @@ export class PokemonService {
   getSpeciesByUrl(url: string): Observable<Species>{
     return this._http.get<Species>(url);
   }
-  
-  getChainByUrl(url: string): Observable<Chain>{
-    return this._http.get<Chain>(url);
-  }
-
-  // getPokemonImageUrl(pokemonId: number): Observable<string> {
-  //   // Supongamos que la API proporciona la URL de la imagen en el campo 'image_url'
-  //   return this._http.get<Pokemon>(`${this.baseUrl}pokemon/${pokemonId}`).pipe(
-  //     map((pokemon: Pokemon) => pokemon.image_url)
-  //   );
 
   getAllItems(): Observable<AItem>{
     const url = this.baseUrl + "item?limit=100000&offset=0";
@@ -97,4 +90,31 @@ export class PokemonService {
     return this._http.get<Item>(url);
   }
 
+  getAllAbilities(): Observable<AAbility>{
+    const url = this.baseUrl + "ability?limit=100000&offset=0";
+    return this._http.get<AAbility>(url);
+  }
+
+  getAbilityByUrl(url: string): Observable<Ability>{
+    return this._http.get<Ability>(url);
+  }
+
+  getAbilityById(abilityId: string): Observable<Ability>{
+    const url = this.baseUrl + "ability/" + abilityId;
+    return this._http.get<Ability>(url);
+  }
+
+  getAllChains():Observable<AChain>{
+    const url = this.baseUrl + 'evolution-chain?limit=100000&offset=0';
+    return this._http.get<AChain>(url);
+  }
+
+  getChainByUrl(url: string): Observable<Chain>{
+    return this._http.get<Chain>(url);
+  }
+
+  getChainById(chainId: string): Observable<Chain>{
+    const url = this.baseUrl + "evolution-chain/" + chainId;
+    return this._http.get<Chain>(url);
+  }
 }

@@ -24,6 +24,7 @@ import { AbilityListComponent } from './components/ability-list/ability-list.com
 import { ConcreteAbilityComponent } from './components/concrete-ability/concrete-ability.component';
 import { ItemListComponent } from './components/item-list/item-list.component';
 import { ConcreteItemComponent } from './components/concrete-item/concrete-item.component';
+import { LoaderComponent } from './components/loader/loader.component';
 
 
 
@@ -43,7 +44,8 @@ import { ConcreteItemComponent } from './components/concrete-item/concrete-item.
     AbilityListComponent,
     ConcreteAbilityComponent,
     ItemListComponent,
-    ConcreteItemComponent
+    ConcreteItemComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

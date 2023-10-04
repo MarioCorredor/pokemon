@@ -31,6 +31,7 @@ export class TypeListComponent {
       data => {
         console.log("Types:", data);
         this.types = data;
+        this.isLoading = false;
       },
       err => {
         console.log(err);
